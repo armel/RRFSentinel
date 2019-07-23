@@ -68,11 +68,7 @@ def readlog():
     f.close()
     log.reverse()
     log.sort(key = fctSort)
-    
-    print log
 
-    exit(0)
-    
     lastName = ''
     name = ''
     i = 0
@@ -122,11 +118,7 @@ def main(argv):
 
         readlog()
 
-        print links
-        print '-----'
-        print ips
-        print '-----'
-        print len(links), len(ips)
+        print prov
         print '---------------'
 
         time.sleep(10)
