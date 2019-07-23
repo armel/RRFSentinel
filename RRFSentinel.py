@@ -121,11 +121,9 @@ def main(argv):
         print links
         print '-----'
         print ips
-        print '-----'
-        print log
         print '---------------'
 
-        time.sleep(1000)
+        time.sleep(10)
 
 if __name__ == '__main__':
     try:
