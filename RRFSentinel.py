@@ -119,10 +119,11 @@ def main(argv):
         readlog()
 
         print links
-        print ips
-        print log
-
         print '-----'
+        print ips
+        print '-----'
+        print log
+        print '---------------'
 
         time.sleep(1000)
 
