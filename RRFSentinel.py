@@ -17,6 +17,8 @@ import getopt
 links = list()
 ips = list()
 log = list()
+logged=dict()
+
 
 def usage():
     return true
@@ -86,7 +88,7 @@ def main(argv):
         minute = int(now[3:-3])
         seconde = int(now[-2:])
 
-        readlog();
+        readlog()
 
         print links
         print ips
