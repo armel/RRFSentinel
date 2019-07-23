@@ -29,6 +29,27 @@ def fctSort(e):
     n = e.split(':')
     return n[3].strip()
 
+def readbip():
+    # readbip lit le fichier BIP.txt pour alimentre le dictionnary bip
+    f = open('/root/BIP.txt','r')
+    for x in f:
+      e = x.split(":")
+      bip[e[0]] = e[1]
+    f.close()
+
+def writebip():
+    # writebip sauvegarde le dictionnary bip dans BIP.txt.
+    f = open('/root/BIP.txt','w')
+    for n in bip:
+      txt = n + ':' + bip[n] + ':\n'
+      f.write(txt)
+    f.close()
+
+def writelog(txt):
+    fl=open('/root/blockIP.log','a')
+    fl.write(txt)
+    fl.close()
+
 def readlog():
     # lecture du svxreflector.log
     
