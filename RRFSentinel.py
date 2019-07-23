@@ -23,8 +23,13 @@ logged=dict()
 def usage():
     return true
 
+def fctSort(e):
+    # Cette fonction renvoie le nom du link afin de trier la liste.
+    n = e.split(':')
+    return n[3].strip()
+
 def readlog():
-    """ lecture du svxreflector.log """
+    # lecture du svxreflector.log
     
     f = open('/tmp/svxreflector.log')
     i = 0
