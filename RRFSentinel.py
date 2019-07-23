@@ -121,6 +121,8 @@ def main(argv):
         print links
         print '-----'
         print ips
+        print '-----'
+        print len(links), len(ips)
         print '---------------'
 
         time.sleep(10)
