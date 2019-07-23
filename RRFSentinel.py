@@ -17,7 +17,8 @@ import getopt
 links = list()
 ips = list()
 log = list()
-logged=dict()
+prov = dict()
+logged = dict()
 
 
 def usage():
