@@ -17,6 +17,7 @@ import getopt
 links = list()
 ips = list()
 log = list()
+bip = dict()
 prov = dict()
 logged = dict()
 
