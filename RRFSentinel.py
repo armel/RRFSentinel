@@ -61,13 +61,17 @@ def readlog():
         name = e[3].strip()
         if 'Login' in x:
             log.append(x)
-            logged[name]=1
+            logged[name] = 1
         elif 'disconnected' in x:
             if 'Client' not in name:
                 logged[name] = 0
     f.close()
     log.reverse()
     log.sort(key = fctSort)
+    
+    print log
+
+    exit(0)
     
     lastName = ''
     name = ''
