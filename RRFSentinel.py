@@ -93,7 +93,7 @@ def main(argv):
 
     # Check and get arguments
     try:
-        options, remainder = getopt.getopt(argv, '', ['help', 'count=', 'period='])
+        options, remainder = getopt.getopt(argv, '', ['help', 'limit=', 'period='])
     except getopt.GetoptError:
         usage()
         sys.exit(2)
@@ -101,25 +101,64 @@ def main(argv):
         if opt == '--help':
             usage()
             sys.exit()
-        elif opt in ('--count'):
-            count = arg
+        elif opt in ('--limit'):
+            limit = int(arg)
         elif opt in ('--period'):
-            period = arg
-
-    print count, period
+            period = int(arg)
 
     # Boucle principale
     while(True):
-        tmp = datetime.datetime.now()
-        now = tmp.strftime('%H:%M:%S')
-        hour = int(tmp.strftime('%H'))
-        minute = int(now[3:-3])
-        seconde = int(now[-2:])
+        tmp_stop = datetime.datetime.now()
+        tmp_start = datetime.datetime.now() - datetime.timedelta(minutes = period)
+        search_stop = tmp_stop.strftime('%H:%M:%S')
+        search_start = tmp_start.strftime('%H:%M:%S')
 
-        readlog()
+        search_stop = '02:10:00'        
+        search_start = '02:09:00'
 
-        print prov
-        print '---------------'
+        #readlog()
+        #print prov
+        #print '---------------'
+
+        # Request HTTP datas
+        try:
+            r = requests.get('http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf.json', verify=False, timeout=10)
+            page = r.content
+        except requests.exceptions.ConnectionError as errc:
+            print ('Error Connecting:', errc)
+        except requests.exceptions.Timeout as errt:
+            print ('Timeout Error:', errt)
+
+
+        print search_stop, search_start
+
+        line = page.split('\n')
+        start = line.index('"porteuseExtended":')
+
+        start += 4
+
+        while(True):
+            indicatif = line[start].strip()
+            indicatif = indicatif[14:-2]
+            start += 2
+            horodatage = line[start].strip()
+            horodatage = horodatage[9:-1]
+            horodatage = horodatage.split(', ')
+
+            count = 0
+            for h in horodatage:
+                if h < search_stop and h > search_start:
+                    count += 1
+
+            if count >= limit:
+                print 'iptables -I INPUT -s ' + indicatif + ' -p udp --dport 5300 -j DROP'
+
+            print '-----'
+            start += 2
+            if line[start] == '],':
+                break
+            else:
+                start += 2
 
         time.sleep(10)
 
