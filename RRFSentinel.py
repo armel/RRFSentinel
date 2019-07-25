@@ -51,6 +51,10 @@ def main(argv):
         plage_start = (now - datetime.timedelta(minutes = s.plage)).strftime('%H:%M:%S')
 
         l.readlog()
+
+        print s.prov
+
+        exit(0)
         
         # Request HTTP datas
         try:
