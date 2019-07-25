@@ -13,7 +13,7 @@ Sur une durée de 1 minute
 On ban pour 15 minutes
 '''
 
-declenchement = 5	# nombre max de déclenchements suspects 
+declenchement = 2	# nombre max de déclenchements suspects 
 plage = 1			# durée de la plage de déclenchements en minutes
 ban = 1				# durée de la quarantaine en minutes
 salon = 'RRF'		# room a surveiller

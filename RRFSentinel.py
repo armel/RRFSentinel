@@ -52,9 +52,7 @@ def main(argv):
         search_start = tmp_start.strftime('%H:%M:%S')
 
         l.readlog()
-        print s.prov
-        #print '---------------'
-
+        
         # Request HTTP datas
         try:
             r = requests.get(s.salon_list[s.salon]['url'], verify=False, timeout=1)
@@ -91,6 +89,7 @@ def main(argv):
                     if count >= s.declenchement:
                         print indicatif, count, horodatage[-count:]
                         print 'iptables -I INPUT -s ' + indicatif + ' -p udp --dport 5300 -j DROP'
+                        print 'iptables -I INPUT -s ' + s.prov[indicatif] + ' -p udp --dport 5300 -j DROP'
 
                 start += 2
                 if line[start] == '],':
