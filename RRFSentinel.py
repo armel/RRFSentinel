@@ -51,8 +51,8 @@ def main(argv):
         search_stop = tmp_stop.strftime('%H:%M:%S')
         search_start = tmp_start.strftime('%H:%M:%S')
 
-        #l.readlog()
-        #print prov
+        l.readlog()
+        print prov
         #print '---------------'
 
         # Request HTTP datas
