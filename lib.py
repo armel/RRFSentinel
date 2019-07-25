@@ -32,14 +32,14 @@ def readbip():
     f = open('/root/BIP.txt','r')
     for x in f:
       e = x.split(":")
-      bip[e[0]] = e[1]
+      s.bip[e[0]] = e[1]
     f.close()
 
 # writebip sauvegarde le dictionnary bip dans BIP.txt.
 def writebip():
     f = open('/root/BIP.txt','w')
-    for n in bip:
-      txt = n + ':' + bip[n] + ':\n'
+    for n in s.bip:
+      txt = n + ':' + s.bip[n] + ':\n'
       f.write(txt)
     f.close()
 
@@ -56,32 +56,32 @@ def readlog():
         e = x.split(':')
         name = e[3].strip()
         if 'Login' in x:
-            log.append(x)
+            s.log.append(x)
             logged[name] = 1
         elif 'disconnected' in x:
             if 'Client' not in name:
                 logged[name] = 0
     f.close()
-    log.reverse()
-    log.sort(key = fctSort)
+    s.log.reverse()
+    s.log.sort(key = fctSort)
 
     lastName = ''
     name = ''
     i = 0
-    for x in log:
+    for x in s.log:
         e = x.split(':')
         name=e[3].strip()
         if name != lastName:
-            prov[name] = e[4][15:]
+            s.prov[name] = e[4][15:]
             lastName=name
             i += 1
     readbip()
-    for x in bip:
-        if x not in prov:
-            prov[x]='---.---.---.---'
+    for x in s.bip:
+        if x not in s.prov:
+            s.prov[x]='---.---.---.---'
     i = 0
-    for key in sorted(prov.keys()) :
-        links.append(key)
-        ips.append(prov[key])
+    for key in sorted(s.prov.keys()) :
+        s.links.append(key)
+        s.ips.append(s.prov[key])
         i += 1
         
