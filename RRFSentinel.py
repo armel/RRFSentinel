@@ -53,8 +53,6 @@ def main(argv):
         l.readlog()
 
         print s.prov
-
-        exit(0)
         
         # Request HTTP datas
         try:
