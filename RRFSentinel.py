@@ -52,7 +52,7 @@ def main(argv):
 
         l.readlog()
 
-        print s.prov
+        #print s.prov
 
         # Request HTTP datas
         try:
@@ -64,7 +64,7 @@ def main(argv):
             print ('Timeout Error:', errt)
 
 
-        print plage_start, plage_stop
+        #print plage_start, plage_stop
 
         line = page.split('\n')
         start = line.index('"porteuseExtended":')
@@ -88,9 +88,9 @@ def main(argv):
                             count += 1
 
                     if count >= s.declenchement and indicatif in s.prov and indicatif not in s.ban_list:
-                        print indicatif, count, horodatage[-count:]
-                        print '>> iptables -I INPUT -s ' + indicatif + ' -j DROP'
-                        print '>> iptables -I INPUT -s ' + s.prov[indicatif] + ' -j DROP'
+                        #print indicatif, count, horodatage[-count:]
+                        #print '>> iptables -I INPUT -s ' + indicatif + ' -j DROP'
+                        print indicatif + ' >> iptables -I INPUT -s ' + s.prov[indicatif] + ' -j DROP'
                         s.ban_list[indicatif] = (now + datetime.timedelta(minutes = s.ban)).strftime('%H:%M:%S')
 
                 start += 2
@@ -107,13 +107,13 @@ def main(argv):
 
             if unban_list:
                 for b in unban_list:
-                    print '<< iptables -D INPUT -s ' + s.prov[b] + ' -j DROP'
+                    print b + ' << iptables -D INPUT -s ' + s.prov[b] + ' -j DROP'
                     del s.ban_list[b]
 
 
             print '-----'
 
-        time.sleep(10)
+        time.sleep(5)
 
 if __name__ == '__main__':
     try:
