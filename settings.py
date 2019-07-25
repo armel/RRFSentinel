@@ -15,7 +15,7 @@ On ban pour 15 minutes
 
 declenchement = 5	# nombre max de déclenchements suspects 
 plage = 1			# durée de la plage de déclenchements en minutes
-ban = 15			# durée de la quarantaine en minutes
+ban = 1				# durée de la quarantaine en minutes
 salon = 'RRF'		# room a surveiller
 
 salon_list = {
@@ -25,10 +25,12 @@ salon_list = {
     'RRF_V1': {
         'url': 'http://rrf.f5nlg.ovh:8080/RRFTracker/RRF_V1-today/rrf.json',
     },
-    'LOCAL': {
-        'url': 'http://rrf.f5nlg.ovh:8080/RRFTracker/LOCAL-today/rrf.json',
+    'INTERNATIONAL': {
+        'url': 'http://rrf.f5nlg.ovh:8080/RRFTracker/INTERNATIONAL-today/rrf.json',
     }
 }
+
+white_list = ['F5ZIN-L', 'R.R.F', 'R.R.F_V2', 'RRF', 'RRF3']
 
 links = list()
 ips = list()

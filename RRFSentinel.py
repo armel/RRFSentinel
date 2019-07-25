@@ -36,8 +36,8 @@ def main(argv):
         elif opt in ('--ban'):
             s.ban = int(arg)
         elif opt in ('--salon'):
-            if arg not in ['RRF', 'RRF_V1', 'LOCAL']:
-                print 'Nom de salon inconnu (choisir parmi \'RRF\', \'RRF_V1\', ou \'LOCAL\')'
+            if arg not in ['RRF', 'RRF_V1', 'INTERNATIONAL']:
+                print 'Nom de salon inconnu (choisir parmi \'RRF\', \'RRF_V1\', ou \'INTERNATIONAL\')'
                 sys.exit()
             s.salon = arg
 
@@ -82,14 +82,14 @@ def main(argv):
                 horodatage = horodatage[9:-1]
                 horodatage = horodatage.split(', ')
 
-                if indicatif not in ['F5ZIN-L', 'R.R.F_V2']:
+                if indicatif not in s.white_list:
                     count = 0
                     for h in horodatage:
                         if h < search_stop and h > search_start:
                             count += 1
 
                     if count >= s.declenchement:
-                        print indicatif, count, horodatage
+                        print indicatif, count, horodatage[-count:]
                         print 'iptables -I INPUT -s ' + indicatif + ' -p udp --dport 5300 -j DROP'
 
                 start += 2
