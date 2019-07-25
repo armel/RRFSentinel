@@ -46,8 +46,9 @@ def main(argv):
 
     # Boucle principale
     while(True):
-        plage_stop = datetime.datetime.now().strftime('%H:%M:%S')
-        plage_start = (datetime.datetime.now() - datetime.timedelta(minutes = s.plage)).strftime('%H:%M:%S')
+        now = datetime.datetime.now()
+        plage_stop = now.strftime('%H:%M:%S')
+        plage_start = (now - datetime.timedelta(minutes = s.plage)).strftime('%H:%M:%S')
 
         l.readlog()
         
@@ -88,7 +89,7 @@ def main(argv):
                         print indicatif, count, horodatage[-count:]
                         print 'iptables -I INPUT -s ' + indicatif + ' -p udp --dport 5300 -j DROP'
                         print 'iptables -I INPUT -s ' + s.prov[indicatif] + ' -p udp --dport 5300 -j DROP'
-                        s.ban_list[indicatif] = plage_stop
+                        s.ban_list[indicatif] = (now + datetime.timedelta(minutes = s.ban)).strftime('%H:%M:%S')
 
                 start += 2
                 if line[start] == '],':
@@ -98,6 +99,8 @@ def main(argv):
 
             for b in s.ban_list:
                 print b, s.ban_list[b]
+                if now.strftime('%H:%M:%S') > s.ban_list[b]:
+                    del s.ban_list[b]
 
             print '-----'
 
