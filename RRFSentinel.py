@@ -87,7 +87,7 @@ def main(argv):
                         if h < plage_stop and h > plage_start:
                             count += 1
 
-                    if count >= s.declenchement and indicatif in s.prov and indicatif not in ban_list:
+                    if count >= s.declenchement and indicatif in s.prov and indicatif not in s.ban_list:
                         print indicatif, count, horodatage[-count:]
                         print '>> iptables -I INPUT -s ' + indicatif + ' -j DROP'
                         print '>> iptables -I INPUT -s ' + s.prov[indicatif] + ' -j DROP'
