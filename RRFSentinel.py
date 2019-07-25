@@ -96,7 +96,7 @@ def main(argv):
                 else:
                     start += 2
 
-            print ban_list
+            print s.ban_list
             print '-----'
 
         time.sleep(10)
