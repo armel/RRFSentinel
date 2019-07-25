@@ -7,6 +7,8 @@ Learn more about RRF on https://f5nlg.wordpress.com
 73 & 88 de F4HWN Armel
 '''
 
+import settings as s
+
 # Usage
 def usage():
     print 'Usage: RRFSentinel.py [options ...]'
