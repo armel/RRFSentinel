@@ -110,9 +110,6 @@ def main(argv):
                     print b + ' << iptables -D INPUT -s ' + s.prov[b] + ' -j DROP'
                     del s.ban_list[b]
 
-
-            print '-----'
-
         time.sleep(5)
 
 if __name__ == '__main__':
