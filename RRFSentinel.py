@@ -47,7 +47,7 @@ def main(argv):
     # Boucle principale
     while(True):
         plage_stop = datetime.datetime.now().strftime('%H:%M:%S')
-        plage_start = datetime.datetime.now() - datetime.timedelta(minutes = s.plage).strftime('%H:%M:%S')
+        plage_start = (datetime.datetime.now() - datetime.timedelta(minutes = s.plage)).strftime('%H:%M:%S')
 
         l.readlog()
         
