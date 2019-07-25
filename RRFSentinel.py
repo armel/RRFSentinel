@@ -96,9 +96,8 @@ def main(argv):
                 else:
                     start += 2
 
-            print s.ban_list
             for b in s.ban_list:
-                print b
+                print b, s.ban_list[b]
 
             print '-----'
 
