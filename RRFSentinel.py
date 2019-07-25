@@ -53,7 +53,7 @@ def main(argv):
         l.readlog()
 
         print s.prov
-        
+
         # Request HTTP datas
         try:
             r = requests.get(s.salon_list[s.salon]['url'], verify=False, timeout=1)
@@ -87,7 +87,7 @@ def main(argv):
                         if h < plage_stop and h > plage_start:
                             count += 1
 
-                    if count >= s.declenchement:
+                    if count >= s.declenchement and indicatif in s.prov:
                         print indicatif, count, horodatage[-count:]
                         print 'iptables -I INPUT -s ' + indicatif + ' -p udp --dport 5300 -j DROP'
                         print 'iptables -I INPUT -s ' + s.prov[indicatif] + ' -p udp --dport 5300 -j DROP'
