@@ -61,7 +61,7 @@ def main(argv):
             print ('Timeout Error:', errt)
 
 
-        print search_stop, search_start
+        print plage_start, plage_stop
 
         line = page.split('\n')
         start = line.index('"porteuseExtended":')
