@@ -21,7 +21,7 @@ def main(argv):
 
     # Check and get arguments
     try:
-        options, remainder = getopt.getopt(argv, '', ['help', 'declenchement=', 'plage=', 'ban='])
+        options, remainder = getopt.getopt(argv, '', ['help', 'declenchement=', 'plage=', 'ban=', 'salon='])
     except getopt.GetoptError:
         l.usage()
         sys.exit(2)
@@ -35,6 +35,14 @@ def main(argv):
             s.plage = int(arg)
         elif opt in ('--ban'):
             s.ban = int(arg)
+        elif opt in ('--salon'):
+            if arg not in ['RRF', 'RRF_V1', 'LOCAL']:
+                print 'Nom de salon inconnu (choisir parmi \'RRF\', \'RRF_V1\', ou \'LOCAL\')'
+                sys.exit()
+            s.salon = arg
+
+    print 'Salon %s, déclenchement %d, plage %d minute, ban %d minutes' % (s.salon, s.declenchement, s.plage, s.ban)
+
 
     # Boucle principale
     while(True):
@@ -49,7 +57,7 @@ def main(argv):
 
         # Request HTTP datas
         try:
-            r = requests.get('http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf.json', verify=False, timeout=10)
+            r = requests.get(s.salon_list[s.salon]['url'], verify=False, timeout=1)
             page = r.content
         except requests.exceptions.ConnectionError as errc:
             print ('Error Connecting:', errc)
@@ -62,31 +70,35 @@ def main(argv):
         line = page.split('\n')
         start = line.index('"porteuseExtended":')
 
-        start += 4
+        if line[start + 2] != '],':
 
-        while(True):
-            indicatif = line[start].strip()
-            indicatif = indicatif[14:-2]
-            start += 2
-            horodatage = line[start].strip()
-            horodatage = horodatage[9:-1]
-            horodatage = horodatage.split(', ')
+            start += 4
 
-            count = 0
-            for h in horodatage:
-                if h < search_stop and h > search_start:
-                    count += 1
-
-            if count >= s.declenchement:
-                print 'iptables -I INPUT -s ' + indicatif + ' -p udp --dport 5300 -j DROP'
-
-            start += 2
-            if line[start] == '],':
-                break
-            else:
+            while(True):
+                indicatif = line[start].strip()
+                indicatif = indicatif[14:-2]
                 start += 2
+                horodatage = line[start].strip()
+                horodatage = horodatage[9:-1]
+                horodatage = horodatage.split(', ')
 
-        print '-----'
+                if indicatif not in ['F5ZIN-L', 'R.R.F_V2']:
+                    count = 0
+                    for h in horodatage:
+                        if h < search_stop and h > search_start:
+                            count += 1
+
+                    if count >= s.declenchement:
+                        print indicatif, count, horodatage
+                        print 'iptables -I INPUT -s ' + indicatif + ' -p udp --dport 5300 -j DROP'
+
+                start += 2
+                if line[start] == '],':
+                    break
+                else:
+                    start += 2
+
+            print '-----'
 
         time.sleep(15)
 
