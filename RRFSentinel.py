@@ -88,7 +88,7 @@ def main(argv):
                         print indicatif, count, horodatage[-count:]
                         print 'iptables -I INPUT -s ' + indicatif + ' -p udp --dport 5300 -j DROP'
                         print 'iptables -I INPUT -s ' + s.prov[indicatif] + ' -p udp --dport 5300 -j DROP'
-                        ban_list[indicatif] = 
+                        ban_list[indicatif] = plage_stop
 
                 start += 2
                 if line[start] == '],':
@@ -96,6 +96,7 @@ def main(argv):
                 else:
                     start += 2
 
+            print ban_list
             print '-----'
 
         time.sleep(10)
