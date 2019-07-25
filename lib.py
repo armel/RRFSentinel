@@ -86,4 +86,3 @@ def readlog():
         s.links.append(key)
         s.ips.append(s.prov[key])
         i += 1
-        

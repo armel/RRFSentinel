@@ -46,10 +46,8 @@ def main(argv):
 
     # Boucle principale
     while(True):
-        tmp_stop = datetime.datetime.now()
-        tmp_start = datetime.datetime.now() - datetime.timedelta(minutes = s.plage)
-        search_stop = tmp_stop.strftime('%H:%M:%S')
-        search_start = tmp_start.strftime('%H:%M:%S')
+        plage_stop = datetime.datetime.now().strftime('%H:%M:%S')
+        plage_start = datetime.datetime.now() - datetime.timedelta(minutes = s.plage).strftime('%H:%M:%S')
 
         l.readlog()
         
@@ -83,13 +81,14 @@ def main(argv):
                 if indicatif not in s.white_list:
                     count = 0
                     for h in horodatage:
-                        if h < search_stop and h > search_start:
+                        if h < plage_stop and h > plage_start:
                             count += 1
 
                     if count >= s.declenchement:
                         print indicatif, count, horodatage[-count:]
                         print 'iptables -I INPUT -s ' + indicatif + ' -p udp --dport 5300 -j DROP'
                         print 'iptables -I INPUT -s ' + s.prov[indicatif] + ' -p udp --dport 5300 -j DROP'
+                        ban_list[indicatif] = 
 
                 start += 2
                 if line[start] == '],':
@@ -99,7 +98,7 @@ def main(argv):
 
             print '-----'
 
-        time.sleep(15)
+        time.sleep(10)
 
 if __name__ == '__main__':
     try:
