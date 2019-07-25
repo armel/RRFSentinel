@@ -52,7 +52,7 @@ def main(argv):
         search_start = tmp_start.strftime('%H:%M:%S')
 
         l.readlog()
-        print prov
+        print s.prov
         #print '---------------'
 
         # Request HTTP datas
