@@ -100,10 +100,13 @@ def main(argv):
                     start += 2
 
             unban_list = []
-            for b in s.ban_list:
-                #print b, s.ban_list[b]
-                if now.strftime('%H:%M:%S') > s.ban_list[b]:
-                    unban_list.append(b)
+
+            with open('ban.log', 'w') as f:
+                for b in s.ban_list:
+                    print >> f, b
+                    #print b, s.ban_list[b]
+                    if now.strftime('%H:%M:%S') > s.ban_list[b]:
+                        unban_list.append(b)
 
             if unban_list:
                 for b in unban_list:
