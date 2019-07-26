@@ -21,7 +21,7 @@ def main(argv):
 
     # Check and get arguments
     try:
-        options, remainder = getopt.getopt(argv, '', ['help', 'declenchement=', 'plage=', 'ban=', 'salon='])
+        options, remainder = getopt.getopt(argv, '', ['help', 'declenchement=', 'plage=', 'ban=', 'salon=', 'log-path='])
     except getopt.GetoptError:
         l.usage()
         sys.exit(2)
@@ -40,8 +40,10 @@ def main(argv):
                 print 'Nom de salon inconnu (choisir parmi \'RRF\' ou \'RRF_V1\')'
                 sys.exit()
             s.salon = arg
+        elif opt in ('--log-path'):
+            s.log_path = arg
 
-    print 'Salon %s, déclenchement %d, plage %d minute, ban %d minutes' % (s.salon, s.declenchement, s.plage, s.ban)
+    print 'Salon %s, déclenchement %d, plage %d minute, ban %d minutes, log %s' % (s.salon, s.declenchement, s.plage, s.ban, s.log_path)
 
 
     # Boucle principale
@@ -93,7 +95,7 @@ def main(argv):
                         cmd = 'iptables -I INPUT -s ' + s.prov[indicatif] + ' -j DROP'
                         os.system(cmd)
                         s.ban_list[indicatif] = (now + datetime.timedelta(minutes = s.ban)).strftime('%H:%M:%S')
-                        print indicatif + ' >> ' + cmd
+                        print plage_stop + ' ' + indicatif + ' ' + horodatage[-count:] + ' >> ' + cmd
 
                 start += 2
                 if line[start] == '],':
@@ -103,7 +105,7 @@ def main(argv):
 
             unban_list = []
 
-            with open('ban.log', 'w') as f:
+            with open(s.log_path +'/RRFSentinel_ban.log', 'w') as f:
                 for b in s.ban_list:
                     print >> f, b, s.prov[b], s.ban_list[b]
                     #print b, s.ban_list[b]
@@ -114,10 +116,10 @@ def main(argv):
                 for b in unban_list:
                     cmd = 'iptables -D INPUT -s ' + s.prov[b] + ' -j DROP'
                     os.system(cmd)
-                    print b + ' << ' + cmd
+                    print plage_stop + ' ' + b + ' << ' + cmd
                     del s.ban_list[b]
 
-        time.sleep(5)
+        time.sleep(2)
 
 if __name__ == '__main__':
     try:

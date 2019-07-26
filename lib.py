@@ -21,6 +21,7 @@ def usage():
     print '  --plage            nombre      durée de la plage de déclenchements, en minutes'
     print '  --ban              nombre      durée de la quarantaine, en minutes'
     print '  --salon            nom         nom du salon a surveiller: RRF ou RRF_V1'
+    print '  --log-path         chemin      chemin du repertoire pour les logs'
     print
     print '88 & 73 from F4HWN Armel'
 

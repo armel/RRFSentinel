@@ -13,10 +13,17 @@ Sur une durée de 1 minute
 On ban pour 15 minutes
 '''
 
-declenchement = 4	# nombre max de déclenchements suspects 
-plage = 1			# durée de la plage de déclenchements en minutes
-ban = 5				# durée de la quarantaine en minutes
-salon = 'RRF'		# room a surveiller
+# Version
+
+version = '0.0.1'
+
+# Variables par defaut
+
+declenchement = 4		# nombre max de déclenchements suspects 
+plage = 1				# durée de la plage de déclenchements en minutes
+ban = 5					# durée de la quarantaine en minutes
+salon = 'RRF'			# room a surveiller
+log_path = '/tmp'		# repertoire log
 
 salon_list = {
     'RRF': {
@@ -29,6 +36,8 @@ salon_list = {
 
 white_list = ['F5ZIN-L', 'R.R.F', 'R.R.F_V2', 'RRF', 'RRF3']
 ban_list = {}
+
+# Variables globales
 
 links = list()
 ips = list()
