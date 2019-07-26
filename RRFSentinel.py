@@ -103,7 +103,7 @@ def main(argv):
 
             with open('ban.log', 'w') as f:
                 for b in s.ban_list:
-                    print >> f, b
+                    print >> f, b, s.prov[b], s.ban_list[b]
                     #print b, s.ban_list[b]
                     if now.strftime('%H:%M:%S') > s.ban_list[b]:
                         unban_list.append(b)
