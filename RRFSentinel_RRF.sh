@@ -7,7 +7,7 @@ PATH_PID='/tmp'
 case "$1" in
     start)
         echo "Starting RRFSentinel"
-        nohup python $PATH_SCRIPT --salon RRF --declenchement 4 --plage 1 --ban 5 --log-path $PATH_LOG > $PATH_LOG/RRFSentinel.log & echo $! > $PATH_PID/RRFSentinel.pid
+        nohup python $PATH_SCRIPT --salon RRF --declenchement 4 --plage 1 --ban 5 --log-path $PATH_LOG > $PATH_LOG/RRFSentinel.log 2>&1 & echo $! > $PATH_PID/RRFSentinel.pid
         ;;
     stop) 
         echo "Stopping RRFSentinel"
