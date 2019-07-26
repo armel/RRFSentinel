@@ -90,8 +90,10 @@ def main(argv):
                     if count >= s.declenchement and indicatif in s.prov and indicatif not in s.ban_list:
                         #print indicatif, count, horodatage[-count:]
                         #print '>> iptables -I INPUT -s ' + indicatif + ' -j DROP'
-                        print indicatif + ' >> iptables -I INPUT -s ' + s.prov[indicatif] + ' -j DROP'
+                        cmd = 'iptables -I INPUT -s ' + s.prov[indicatif] + ' -j DROP'
+                        os.system(cmd)
                         s.ban_list[indicatif] = (now + datetime.timedelta(minutes = s.ban)).strftime('%H:%M:%S')
+                        print indicatif + ' >> ' + cmd
 
                 start += 2
                 if line[start] == '],':
@@ -110,7 +112,9 @@ def main(argv):
 
             if unban_list:
                 for b in unban_list:
-                    print b + ' << iptables -D INPUT -s ' + s.prov[b] + ' -j DROP'
+                    cmd = 'iptables -D INPUT -s ' + s.prov[b] + ' -j DROP'
+                    os.system(cmd)
+                    print b + ' << ' + cmd
                     del s.ban_list[b]
 
         time.sleep(5)
