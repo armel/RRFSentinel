@@ -20,7 +20,7 @@ def usage():
     print '  --declenchement    nombre      nombre de déclenchement inférieur à 3 secondes'
     print '  --plage            nombre      durée de la plage de déclenchements, en minutes'
     print '  --ban              nombre      durée de la quarantaine, en minutes'
-    print '  --salon            nom         nom du salon a surveiller: RRF, RRF_V1 ou INTERNATIONAL'
+    print '  --salon            nom         nom du salon a surveiller: RRF ou RRF_V1'
     print
     print '88 & 73 from F4HWN Armel'
 

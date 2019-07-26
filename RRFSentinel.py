@@ -37,7 +37,7 @@ def main(argv):
             s.ban = int(arg)
         elif opt in ('--salon'):
             if arg not in ['RRF', 'RRF_V1', 'INTERNATIONAL']:
-                print 'Nom de salon inconnu (choisir parmi \'RRF\', \'RRF_V1\', ou \'INTERNATIONAL\')'
+                print 'Nom de salon inconnu (choisir parmi \'RRF\' ou \'RRF_V1\')'
                 sys.exit()
             s.salon = arg
 
