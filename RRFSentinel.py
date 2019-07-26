@@ -44,9 +44,9 @@ def main(argv):
             s.log_path = arg
 
     print 'Salon: ' + s.salon
-    print 'Déclenchement: ' + s.declenchement
-    print 'Plage: ' + s.plage + 'minute(s)'
-    print 'Ban: ' + s.ban + 'minute(s)'
+    print 'Déclenchement: ' + str(s.declenchement)
+    print 'Plage: ' + str(s.plage) + 'minute(s)'
+    print 'Ban: ' + str(s.ban) + 'minute(s)'
     print 'Log: ' + s.log_path 
     
     # Boucle principale
