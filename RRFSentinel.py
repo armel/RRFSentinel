@@ -95,7 +95,7 @@ def main(argv):
                         cmd = 'iptables -I INPUT -s ' + s.prov[indicatif] + ' -j DROP'
                         os.system(cmd)
                         s.ban_list[indicatif] = (now + datetime.timedelta(minutes = s.ban)).strftime('%H:%M:%S')
-                        print plage_stop + ' ' + indicatif + ' ' + horodatage[-count:] + ' >> ' + cmd
+                        print plage_stop + ' ' + indicatif + ' ' + ', '.join(horodatage[-count:]) + ' >> ' + cmd
 
                 start += 2
                 if line[start] == '],':
