@@ -112,14 +112,14 @@ def main(argv):
                 for b in s.ban_list:
                     print >> f, b, s.prov[b], s.ban_list[b]
                     #print b, s.ban_list[b]
-                    if now.strftime('%H:%M:%S') > s.ban_list[b]:
+                    if now.strftime('%H:%M:%S') > s.ban_list[b] or now.strftime('%H:%M') == '00:00':
                         unban_list.append(b)
 
             if unban_list:
                 for b in unban_list:
                     cmd = 'iptables -D INPUT -s ' + s.prov[b] + ' -j DROP'
                     os.system(cmd)
-                    print plage_stop + ' ' + b + ' << ' + cmd
+                    print plage_stop + ' - ' + b + ' << ' + cmd
                     del s.ban_list[b]
 
         sys.stdout.flush()
