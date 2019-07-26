@@ -119,6 +119,7 @@ def main(argv):
                     print plage_stop + ' ' + b + ' << ' + cmd
                     del s.ban_list[b]
 
+        sys.stdout.flush()
         time.sleep(2)
 
 if __name__ == '__main__':
