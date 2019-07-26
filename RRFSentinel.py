@@ -45,8 +45,8 @@ def main(argv):
 
     print 'Salon: ' + s.salon
     print 'Déclenchement: ' + str(s.declenchement)
-    print 'Plage: ' + str(s.plage) + 'minute(s)'
-    print 'Ban: ' + str(s.ban) + 'minute(s)'
+    print 'Plage: ' + str(s.plage) + ' minute(s)'
+    print 'Ban: ' + str(s.ban) + ' minute(s)'
     print 'Log: ' + s.log_path 
     
     # Boucle principale
