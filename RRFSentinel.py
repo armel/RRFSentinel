@@ -43,9 +43,12 @@ def main(argv):
         elif opt in ('--log-path'):
             s.log_path = arg
 
-    print 'Salon %s, déclenchement %d, plage %d minute, ban %d minutes, log %s' % (s.salon, s.declenchement, s.plage, s.ban, s.log_path)
-
-
+    print 'Salon: ' + s.salon
+    print 'Déclenchement: ' + s.declenchement
+    print 'Plage: ' + s.plage + 'minute(s)'
+    print 'Ban: ' + s.ban + 'minute(s)'
+    print 'Log: ' + s.log_path 
+    
     # Boucle principale
     while(True):
         now = datetime.datetime.now()
@@ -95,7 +98,7 @@ def main(argv):
                         cmd = 'iptables -I INPUT -s ' + s.prov[indicatif] + ' -j DROP'
                         os.system(cmd)
                         s.ban_list[indicatif] = (now + datetime.timedelta(minutes = s.ban)).strftime('%H:%M:%S')
-                        print plage_stop + ' ' + indicatif + ' ' + ', '.join(horodatage[-count:]) + ' >> ' + cmd
+                        print plage_stop + ' - ' + indicatif + ' [ ' + ', '.join(horodatage[-count:]) + '] >> ' + cmd
 
                 start += 2
                 if line[start] == '],':
