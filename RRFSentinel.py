@@ -100,7 +100,7 @@ def main(argv):
                     if count >= s.declenchement and indicatif in s.prov and indicatif not in s.ban_list:
                         cmd = 'iptables -I INPUT -s ' + s.prov[indicatif] + ' -j DROP -m comment --comment RRFSentinel'
                         os.system(cmd)
-                        s.ban_list[indicatif] = (now + datetime.timedelta(minutes = tx)).strftime('%H:%M:%S')
+                        s.ban_list[indicatif] = (now + datetime.timedelta(minutes = int(tx))).strftime('%H:%M:%S')
                         print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + '] - ' + tx + ' - ' + s.ban_list[indicatif] + ' >> ' + cmd
 
                 start += 2
