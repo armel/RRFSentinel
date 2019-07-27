@@ -43,6 +43,7 @@ def main(argv):
         elif opt in ('--log-path'):
             s.log_path = arg
 
+    print 'Version: ' + s.version
     print 'Salon: ' + s.salon
     print 'Déclenchement: ' + str(s.declenchement)
     print 'Plage: ' + str(s.plage) + ' minute(s)'
