@@ -81,24 +81,27 @@ def main(argv):
             while(True):
                 indicatif = line[start].strip()
                 indicatif = indicatif[14:-2]
-                start += 2
-                horodatage = line[start].strip()
-                horodatage = horodatage[9:-1]
-                horodatage = horodatage.split(', ')
+
+                start += 1
+                tx = line[start].strip()
+                tx = tx[6:-1]
+
+                start += 1
+                date = line[start].strip()
+                date = date[9:-1]
+                date = date.split(', ')
 
                 if indicatif not in s.white_list:
                     count = 0
-                    for h in horodatage:
+                    for h in date:
                         if h < plage_stop and h > plage_start:
                             count += 1
 
                     if count >= s.declenchement and indicatif in s.prov and indicatif not in s.ban_list:
-                        #print indicatif, count, horodatage[-count:]
-                        #print '>> iptables -I INPUT -s ' + indicatif + ' -j DROP'
-                        cmd = 'iptables -I INPUT -s ' + s.prov[indicatif] + ' -j DROP'
+                        cmd = 'iptables -I INPUT -s ' + s.prov[indicatif] + ' -j DROP -m comment --comment RRFSentinel'
                         os.system(cmd)
-                        s.ban_list[indicatif] = (now + datetime.timedelta(minutes = s.ban)).strftime('%H:%M:%S')
-                        print plage_stop + ' - ' + indicatif + ' [ ' + ', '.join(horodatage[-count:]) + '] >> ' + cmd
+                        s.ban_list[indicatif] = (now + datetime.timedelta(minutes = tx)).strftime('%H:%M:%S')
+                        print plage_stop + ' - ' + indicatif + ' [ ' + ', '.join(date[-count:]) + '] >> ' + cmd
 
                 start += 2
                 if line[start] == '],':
@@ -117,7 +120,7 @@ def main(argv):
 
             if unban_list:
                 for b in unban_list:
-                    cmd = 'iptables -D INPUT -s ' + s.prov[b] + ' -j DROP'
+                    cmd = 'iptables -D INPUT -s ' + s.prov[b] + ' -j DROP -m comment --comment RRFSentinel'
                     os.system(cmd)
                     print plage_stop + ' - ' + b + ' << ' + cmd
                     del s.ban_list[b]
