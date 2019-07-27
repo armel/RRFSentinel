@@ -19,8 +19,8 @@ version = '0.0.3'
 
 # Variables par defaut
 
-declenchement = 4		# nombre max de déclenchements suspects 
-plage = 1				# durée de la plage de déclenchements en minutes
+declenchement = 3		# nombre max de déclenchements suspects 
+plage = 5				# durée de la plage de déclenchements en minutes
 ban = 5					# durée de la quarantaine en minutes
 salon = 'RRF'			# room a surveiller
 log_path = '/tmp'		# repertoire log
