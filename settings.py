@@ -19,11 +19,12 @@ version = '0.0.4'
 
 # Variables par defaut
 
-declenchement = 3		# nombre max de déclenchements suspects 
-plage = 5				# durée de la plage de déclenchements en minutes
-ban = 5					# durée de la quarantaine en minutes
-salon = 'RRF'			# room a surveiller
-log_path = '/tmp'		# repertoire log
+salon = 'RRF'           # room a surveiller
+declenchement = 3       # nombre max de déclenchements suspects 
+plage = 5               # durée de la plage de déclenchements en minutes
+ban = 5                 # durée de la quarantaine en minutes
+fair_use = 3            # nombre de ban avant application de la règle strict
+log_path = '/tmp'       # repertoire log
 
 salon_list = {
     'RRF': {
@@ -36,6 +37,7 @@ salon_list = {
 
 white_list = ['F5ZIN-L', 'R.R.F', 'R.R.F_V2', 'RRF', 'RRF3']
 ban_list = {}
+ban_count = {}
 
 # Variables globales
 

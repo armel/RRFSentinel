@@ -21,7 +21,7 @@ def main(argv):
 
     # Check and get arguments
     try:
-        options, remainder = getopt.getopt(argv, '', ['help', 'declenchement=', 'plage=', 'ban=', 'salon=', 'log-path='])
+        options, remainder = getopt.getopt(argv, '', ['help', 'salon=', 'declenchement=', 'plage=', 'ban=', 'fair-use=', 'log-path='])
     except getopt.GetoptError:
         l.usage()
         sys.exit(2)
@@ -29,25 +29,28 @@ def main(argv):
         if opt == '--help':
             l.usage()
             sys.exit()
+        elif opt in ('--salon'):
+            if arg not in ['RRF', 'RRF_V1']:
+                print 'Nom de salon inconnu (choisir parmi \'RRF\' ou \'RRF_V1\')'
+                sys.exit()
+            s.salon = arg
         elif opt in ('--declenchement'):
             s.declenchement = int(arg)
         elif opt in ('--plage'):
             s.plage = int(arg)
         elif opt in ('--ban'):
             s.ban = int(arg)
-        elif opt in ('--salon'):
-            if arg not in ['RRF', 'RRF_V1']:
-                print 'Nom de salon inconnu (choisir parmi \'RRF\' ou \'RRF_V1\')'
-                sys.exit()
-            s.salon = arg
+        elif opt in ('--fair-use'):
+            s.fair_use = int(arg)
         elif opt in ('--log-path'):
             s.log_path = arg
 
-    print 'Version: ' + s.version
+    print 'RRFSentinel version ' + s.version
     print 'Salon: ' + s.salon
-    print 'Déclenchement: ' + str(s.declenchement)
-    print 'Plage: ' + str(s.plage) + ' minute(s)'
-    print 'Ban: ' + str(s.ban) + ' minute(s)'
+    print 'Déclenchements: ' + str(s.declenchement)
+    print 'Plage: ' + str(s.plage) + ' minutes'
+    print 'Ban: ' + str(s.ban) + ' minutes'
+    print 'Fair use: ' + str(s.fair_use)
     print 'Log: ' + s.log_path 
     
     # Boucle principale
@@ -106,10 +109,20 @@ def main(argv):
                                 count += 1
 
                         if count >= s.declenchement and indicatif in s.prov and indicatif not in s.ban_list:
+                            try:
+                                s.ban_count[indicatif] += 1
+                            except KeyError:
+                                s.ban_count[indicatif] = 1
+
+                            if s.ban_count[indicatif] <= s.fair_use:
+                                ban_time = s.ban
+                            else:
+                                ban_time = int(tx)
+
                             cmd = 'iptables -I INPUT -s ' + s.prov[indicatif] + ' -j DROP -m comment --comment RRFSentinel'
                             os.system(cmd)
-                            s.ban_list[indicatif] = (now + datetime.timedelta(minutes = int(tx))).strftime('%H:%M:%S')
-                            print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + '] - ' + tx + ' - ' + s.ban_list[indicatif] + ' >> ' + cmd
+                            s.ban_list[indicatif] = (now + datetime.timedelta(minutes = ban_time)).strftime('%H:%M:%S')
+                            print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + '] - ' + s.ban_count[indicatif] + ' - ' + ban_time + ' - ' + s.ban_list[indicatif] + ' >> ' + cmd
 
                     start += 2
                     if line[start] == '],':
