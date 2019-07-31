@@ -122,7 +122,7 @@ def main(argv):
                             cmd = 'iptables -I INPUT -s ' + s.prov[indicatif] + ' -j DROP -m comment --comment RRFSentinel'
                             os.system(cmd)
                             s.ban_list[indicatif] = (now + datetime.timedelta(minutes = ban_time)).strftime('%H:%M:%S')
-                            print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + '] - ' + s.ban_count[indicatif] + ' - ' + str(ban_time) + ' - ' + s.ban_list[indicatif] + ' >> ' + cmd
+                            print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + s.ban_list[indicatif] + ' >> ' + cmd
 
                     start += 2
                     if line[start] == '],':
