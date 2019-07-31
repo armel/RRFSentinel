@@ -15,7 +15,7 @@ On ban pour 15 minutes
 
 # Version
 
-version = '0.0.5'
+version = '0.0.6'
 
 # Variables par defaut
 
@@ -24,7 +24,6 @@ declenchement = 3       # nombre max de déclenchements suspects
 plage = 5               # durée de la plage de déclenchements en minutes
 ban = 5                 # durée de la quarantaine en minutes
 fair_use = 3            # nombre de ban avant application de la règle strict
-log_path = '/tmp'       # repertoire log
 
 salon_list = {
     'RRF': {

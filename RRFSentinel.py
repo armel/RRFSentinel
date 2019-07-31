@@ -21,7 +21,7 @@ def main(argv):
 
     # Check and get arguments
     try:
-        options, remainder = getopt.getopt(argv, '', ['help', 'salon=', 'declenchement=', 'plage=', 'ban=', 'fair-use=', 'log-path='])
+        options, remainder = getopt.getopt(argv, '', ['help', 'salon=', 'declenchement=', 'plage=', 'ban=', 'fair-use='])
     except getopt.GetoptError:
         l.usage()
         sys.exit(2)
@@ -42,8 +42,6 @@ def main(argv):
             s.ban = int(arg)
         elif opt in ('--fair-use'):
             s.fair_use = int(arg)
-        elif opt in ('--log-path'):
-            s.log_path = arg
 
     print 'RRFSentinel version ' + s.version
     print 'Salon: ' + s.salon
@@ -51,15 +49,18 @@ def main(argv):
     print 'Plage: ' + str(s.plage) + ' minutes'
     print 'Ban: ' + str(s.ban) + ' minutes'
     print 'Fair use: ' + str(s.fair_use)
-    print 'Log: ' + s.log_path 
-    
+
+    print '----------'
+    print now.strftime('%Y-%m-%d')
+    print '----------'
+
     # Boucle principale
     while(True):
         now = datetime.datetime.now()
         plage_stop = now.strftime('%H:%M:%S')
         plage_start = (now - datetime.timedelta(minutes = s.plage)).strftime('%H:%M:%S')
 
-        l.readlog()
+        l.read_log()
 
         #print s.link_ip
 
@@ -132,12 +133,9 @@ def main(argv):
 
                 unban_list = []
 
-                with open(s.log_path +'/RRFSentinel_ban.log', 'w') as f:
-                    for b in s.ban_list:
-                        print >> f, b, s.link_ip[b], s.ban_list[b]
-                        #print b, s.ban_list[b]
-                        if now.strftime('%H:%M:%S') > s.ban_list[b] or now.strftime('%H:%M') == '00:00':
-                            unban_list.append(b)
+                for b in s.ban_list:
+                    if now.strftime('%H:%M:%S') > s.ban_list[b] or now.strftime('%H:%M') == '00:00':
+                        unban_list.append(b)
 
                 if unban_list:
                     for b in unban_list:
@@ -146,8 +144,16 @@ def main(argv):
                         print plage_stop + ' - ' + b + ' << ' + cmd
                         del s.ban_list[b]
 
+        # If midnight
+        if now.strftime('%H:%M') == '00:00':
+            print '----------'
+            print now.strftime('%Y-%m-%d')
+            print '----------'
+            time.sleep(60)
+        else:
+            time.sleep(2)
+
         sys.stdout.flush()
-        time.sleep(2)
 
 if __name__ == '__main__':
     try:
