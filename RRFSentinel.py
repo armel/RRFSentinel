@@ -50,6 +50,8 @@ def main(argv):
     print 'Ban: ' + str(s.ban) + ' minutes'
     print 'Fair use: ' + str(s.fair_use)
 
+    now = datetime.datetime.now()
+    
     print '----------'
     print now.strftime('%Y-%m-%d')
     print '----------'
