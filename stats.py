@@ -65,9 +65,9 @@ def main(argv):
     pid = int(tmp[0].strip())
 
     if psutil.pid_exists(pid):
-        print 'RRFSentinel with pid %d exists' % pid
+        print 'Success - RRFSentinel with pid %d exists' % pid
     else:
-        print 'RRFSentinel with pid %d does not exist' % pid
+        print 'Failure - RRFSentinel with pid %d does not exist' % pid
 
     # compute stats
 
