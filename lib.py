@@ -33,4 +33,4 @@ def readlog():
         for line in f:
             if 'Login' in line:
                 element = line.split(':')
-                s.prov[element[3].strip()] = element[4][15:]
+                s.link_ip[element[3].strip()] = element[4][15:]

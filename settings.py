@@ -41,9 +41,4 @@ ban_count = {}
 
 # Variables globales
 
-links = list()
-ips = list()
-log = list()
-bip = dict()
-prov = dict()
-logged = dict()
+link_ip = dict()
