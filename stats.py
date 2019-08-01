@@ -106,6 +106,8 @@ def main(argv):
 
             print horodatage
 
+            print 'https://stackoverflow.com/questions/51791644/python-not-sure-how-to-append-tuples-to-dictionary-value'
+
 
     stat = sorted(stat.items(), key=lambda x: x[1][1])
     stat.reverse()
