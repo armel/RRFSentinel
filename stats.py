@@ -81,17 +81,6 @@ def main(argv):
     find = False
     hr = 0
 
-    # check pid
-
-    f = open('/tmp/RRFSentinel.pid')
-    tmp = f.readlines()
-    pid = int(tmp[0].strip())
-
-    if psutil.pid_exists(pid):
-        print 'Success - RRFSentinel with pid %d exists' % pid
-    else:
-        print 'Failure - RRFSentinel with pid %d does not exist' % pid
-
     # compute stats
 
     total_link = 0
@@ -161,6 +150,20 @@ def main(argv):
     print '\t-> Durée total: ' + str(total_time) + ' minutes'
 
 
+    print '--------------------'
+    print color.GREEN + 'Status:' + color.END
+
+    # check pid
+
+    f = open('/tmp/RRFSentinel.pid')
+    tmp = f.readlines()
+    pid = int(tmp[0].strip())
+
+    if psutil.pid_exists(pid):
+        print color.GREEN + '\t-> Success - RRFSentinel with pid %d exists' % pid
+    else:
+        print color.RED + '\t-> Failure - RRFSentinel with pid %d does not exist' % pid
+    print color.END
 
 if __name__ == '__main__':
     try:
