@@ -24,6 +24,21 @@ def save_stat(stat, indicatif, ban_time):
 
     return stat
 
+# Save stats
+def save_horodatage(horodatage, indicatif, ban_date, ban_time):
+    print indicatif
+    try:
+        print 'try'
+        horodatage[indicatif].append((ban_date, ban_time))
+    except:
+        print 'except'
+        horodatage = {indicatif: [(ban_date, ban_time)]}
+
+    print horodatage, ban_time, ban_date
+    print '-----'
+
+    return horodatage
+
 # Usage
 def usage():
     print 'Usage: RRFTracker.py [options ...]'
@@ -54,6 +69,7 @@ def main(argv):
             day = arg
 
     stat = dict()
+    horodatage = dict()
 
     find = False
     hr = 0
@@ -86,9 +102,15 @@ def main(argv):
                     element = line.split(' - ')
                     if '<<' not in element[1]:
                         stat = save_stat(stat, element[1], int(element[4]))
+                        horodatage = save_horodatage(horodatage, element[1], element[0], int(element[4]))
+
+            print horodatage
+
 
     stat = sorted(stat.items(), key=lambda x: x[1][1])
     stat.reverse()
+
+    print horodatage
 
     for s in stat:
         print s[0] + ':\t',
