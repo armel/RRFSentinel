@@ -14,6 +14,19 @@ import datetime
 import time
 import psutil
 
+# Ansi color
+class color:
+    PURPLE = '\033[95m'
+    CYAN = '\033[96m'
+    DARKCYAN = '\033[36m'
+    BLUE = '\033[94m'
+    GREEN = '\033[92m'
+    YELLOW = '\033[93m'
+    RED = '\033[91m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+    END = '\033[0m'
+
 # Save stats
 def save_stat(stat, indicatif, ban_time):
     try:
@@ -26,16 +39,10 @@ def save_stat(stat, indicatif, ban_time):
 
 # Save stats
 def save_horodatage(horodatage, indicatif, ban_date, ban_time):
-    print indicatif
     try:
-        print 'try'
         horodatage[indicatif].append((ban_date, ban_time))
-    except:
-        print 'except'
-        horodatage = {indicatif: [(ban_date, ban_time)]}
-
-    print horodatage, ban_time, ban_date
-    print '-----'
+    except KeyError:
+        horodatage[indicatif] = [(ban_date, ban_time)]
 
     return horodatage
 
@@ -52,8 +59,8 @@ def usage():
 
 def main(argv):
 
-    tmp = datetime.datetime.now()
-    day = tmp.strftime('%Y-%m-%d')
+    now = datetime.datetime.now()
+    day = now.strftime('%Y-%m-%d')
 
     # Check and get arguments
     try:
@@ -87,6 +94,10 @@ def main(argv):
 
     # compute stats
 
+    total_link = 0
+    total_ban = 0
+    total_time = 0
+
     with open('/tmp/RRFSentinel.log') as f:
         for line in f:
             if day in line:
@@ -104,25 +115,51 @@ def main(argv):
                         stat = save_stat(stat, element[1], int(element[4]))
                         horodatage = save_horodatage(horodatage, element[1], element[0], int(element[4]))
 
-            print horodatage
-
-            print 'https://stackoverflow.com/questions/51791644/python-not-sure-how-to-append-tuples-to-dictionary-value'
-
 
     stat = sorted(stat.items(), key=lambda x: x[1][1])
     stat.reverse()
 
-    print horodatage
-
     for s in stat:
-        print s[0] + ':\t',
-        print '%03d' % s[1][1],
-        print ' minutes, pour ',
-        print '%03d' % s[1][0],
-        if s[1][0] > 1:
-            print ' bans'
+        total_link += 1
+        is_ban = False
+        print '--------------------'
+
+        for t in horodatage[s[0]]:
+            tmp = (now - datetime.timedelta(minutes = t[1])).strftime('%H:%M:%S')
+            if t[0] > tmp:
+                is_ban = True
+                break
+
+        if is_ban is True:
+            print color.RED + s[0] + ': Ban en cours !!!' + color.END
         else:
-            print ' ban'
+            print color.GREEN + s[0] + ':' + color.END
+
+        b = 1
+        for t in horodatage[s[0]]:
+            print '\t-> Ban %02d' % b,
+            print 'à', t[0] + ' pour ' + str(t[1]) + ' minutes'
+            b += 1
+
+        print 'Total\t=>',
+        
+        print '%02d' % s[1][0],
+        if s[1][0] > 1:
+            print 'bans, pour',
+        else:
+            print 'ban, pour',
+        print s[1][1],
+        print 'minutes'
+
+        total_ban += s[1][0]
+        total_time += s[1][1]
+
+    print '--------------------'
+    print color.GREEN + 'Résumé de la journée:' + color.END
+    print '\t-> Nombre de links bannis: ' + str(total_link)
+    print '\t-> Nombre de bannissement: ' + str(total_ban)
+    print '\t-> Durée total: ' + str(total_time) + ' minutes'
+
 
 
 if __name__ == '__main__':
