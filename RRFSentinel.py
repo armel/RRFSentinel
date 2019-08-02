@@ -122,9 +122,16 @@ def main(argv):
                             else:
                                 ban_time = int(tx)
 
-                            cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -j DROP -m comment --comment RRFSentinel'
-                            os.system(cmd)
                             s.ban_list[indicatif] = (now + datetime.timedelta(minutes = ban_time)).strftime('%H:%M:%S')
+
+                            # Ban UDP
+                            cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p udp --dport 5300 -j REJECT -m comment --comment RRFSentinel'
+                            os.system(cmd)
+                            print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + s.ban_list[indicatif] + ' >> ' + cmd
+
+                            # Ban TCP
+                            cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p tcp --dport 5300 -j REJECT -m comment --comment RRFSentinel'
+                            os.system(cmd)
                             print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + s.ban_list[indicatif] + ' >> ' + cmd
 
                     start += 2
@@ -141,9 +148,13 @@ def main(argv):
 
                 if unban_list:
                     for b in unban_list:
-                        cmd = 'iptables -D INPUT -s ' + s.link_ip[b] + ' -j DROP -m comment --comment RRFSentinel'
+                        cmd = 'iptables -D INPUT -s ' + s.link_ip[b] + ' -p udp --dport 5300 -j REJECT -m comment --comment RRFSentinel'
                         os.system(cmd)
                         print plage_stop + ' - ' + b + ' << ' + cmd
+                        cmd = 'iptables -D INPUT -s ' + s.link_ip[b] + ' -p tcp --dport 5300 -j REJECT -m comment --comment RRFSentinel'
+                        os.system(cmd)
+                        print plage_stop + ' - ' + b + ' << ' + cmd
+
                         del s.ban_list[b]
 
         # If midnight
@@ -151,17 +162,15 @@ def main(argv):
             print '----------'
             print now.strftime('%Y-%m-%d')
             print '----------'
-
-            # Reset ban_count
-            s.ban_count.clear()
-
+            # Waiting during RRFTracker init...
             time.sleep(60)
+
         # If time < 06:00am, fair use only !
         if now.strftime('%H:%M') < '06:00':
             # Reset ban_count
             s.ban_count.clear()
-        else:
-            time.sleep(2)
+        
+        time.sleep(2)
 
         sys.stdout.flush()
 
