@@ -101,8 +101,9 @@ def main(argv):
                 if ' - ' in line:
                     element = line.split(' - ')
                     if '<<' not in element[1]:
-                        stat = save_stat(stat, element[1], int(element[4]))
-                        horodatage = save_horodatage(horodatage, element[1], element[0], int(element[4]))
+                        if 'udp --dport 5300' in element[5]:
+                            stat = save_stat(stat, element[1], int(element[4]))
+                            horodatage = save_horodatage(horodatage, element[1], element[0], int(element[4]))
 
 
     stat = sorted(stat.items(), key=lambda x: x[1][1])
