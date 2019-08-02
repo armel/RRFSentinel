@@ -119,7 +119,7 @@ def main(argv):
                 is_ban = True
                 break
 
-        if is_ban is True:
+        if day == now.strftime('%Y-%m-%d') and is_ban is True:
             print color.RED + s[0] + ': Ban en cours !!!' + color.END
         else:
             print color.GREEN + s[0] + ':' + color.END
