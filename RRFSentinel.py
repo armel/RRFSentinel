@@ -151,7 +151,15 @@ def main(argv):
             print '----------'
             print now.strftime('%Y-%m-%d')
             print '----------'
+
+            # Reset ban_count
+            s.ban_count.clear()
+
             time.sleep(60)
+        # If time < 06:00am, fair use only !
+        if now.strftime('%H:%M') < '06:00':
+            # Reset ban_count
+            s.ban_count.clear()
         else:
             time.sleep(2)
 
