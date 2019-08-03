@@ -22,9 +22,15 @@ Aujourd'hui, le nombre N est égal à 3 et le laps de temps L a été fixé à 5
 
 ### Un bannissement variable
 
-Fair use N°1: La durée de bannissement est fixée à 5 minutes entre 00:00 AM et 06:00 AM. 
+#### Fair use N°1
 
-Fair use N°2: À partir de 06:00 AM, la durée de bannissement est toujours fixée à 5 minutes mais uniquement lors des 3 premiers bannissement.
+La durée de bannissement est fixée à 5 minutes entre 00:00 AM et 06:00 AM. 
+
+#### Fair use N°2
+
+À partir de 06:00 AM, la durée de bannissement est toujours fixée à 5 minutes mais uniquement lors des 3 premiers bannissement.
+
+#### Plus un link perturbe le RRF, plus longtemps il sera banni
 
 Au délà, la durée de bannissement est fixée au nombre de déclenchements intempestifs mesuré depuis le début de la journée. 
 
