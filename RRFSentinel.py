@@ -122,7 +122,11 @@ def main(argv):
                             else:
                                 ban_time = int(tx)
 
-                            s.ban_list[indicatif] = (now + datetime.timedelta(minutes = ban_time)).strftime('%H:%M:%S')
+                            tmp = (now + datetime.timedelta(minutes = ban_time)).strftime('%H:%M:%S')
+                            if tmp < now.strftime('%H:%M:%S'):
+                                tmp = '23:59:59'
+
+                            s.ban_list[indicatif] = tmp
 
                             # Ban UDP
                             cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p udp --dport 5300 -j REJECT -m comment --comment RRFSentinel'
