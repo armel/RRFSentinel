@@ -122,21 +122,21 @@ def main(argv):
                             else:
                                 ban_time = int(tx)
 
-                            tmp = (now + datetime.timedelta(minutes = ban_time)).strftime('%H:%M:%S')
-                            if tmp < now.strftime('%H:%M:%S'):
-                                tmp = '23:59:59'
+                            ban_timestamp = (now + datetime.timedelta(minutes = ban_time))
+                            ban_clock = ban_timestamp.strftime('%H:%M:%S')
+                            ban_timestamp = time.mktime(ban_timestamp.timetuple())
 
-                            s.ban_list[indicatif] = tmp
+                            s.ban_list[indicatif] = ban_timestamp
 
                             # Ban UDP
                             cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif +'\''
                             os.system(cmd)
-                            print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + s.ban_list[indicatif] + ' >> ' + cmd
+                            print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
 
                             # Ban TCP
                             cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif +'\''
                             os.system(cmd)
-                            print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + s.ban_list[indicatif] + ' >> ' + cmd
+                            print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
 
                     start += 2
                     if line[start] == '],':
@@ -147,7 +147,7 @@ def main(argv):
                 unban_list = []
 
                 for b in s.ban_list:
-                    if now.strftime('%H:%M:%S') > s.ban_list[b] or now.strftime('%H:%M') == '00:00':
+                    if time.mktime(now.timetuple()) > s.ban_list[b]:
                         unban_list.append(b)
 
                 if unban_list:
