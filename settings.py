@@ -15,12 +15,12 @@ On ban pour 15 minutes
 
 # Version
 
-version = '1.0.2'
+version = '1.0.3'
 
 # Variables par defaut
 
 salon = 'RRF'           # room a surveiller
-declenchement = 3       # nombre max de déclenchements suspects 
+declenchement = 4       # nombre max de déclenchements suspects 
 plage = 5               # durée de la plage de déclenchements en minutes
 ban = 5                 # durée de la quarantaine en minutes
 fair_use = 3            # nombre de ban avant application de la règle strict
