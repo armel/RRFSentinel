@@ -44,11 +44,12 @@ def main(argv):
             s.fair_use = int(arg)
 
     now = datetime.datetime.now()
-    
+    day = now.strftime('%Y-%m-%d')
+
     restart = False
     with open('/tmp/RRFSentinel.log') as f:
         for line in f:
-            if now in line:
+            if day in line:
                 restart = True
                 break
 
