@@ -43,18 +43,30 @@ def main(argv):
         elif opt in ('--fair-use'):
             s.fair_use = int(arg)
 
+    now = datetime.datetime.now()
+    
+    restart = False
+    with open('/tmp/RRFSentinel.log') as f:
+        for line in f:
+            if now in line:
+                restart = True
+                break
+
+    if restart is False:
+        print '----------'
+        print now.strftime('%Y-%m-%d')
+        print '----------'
+    else:
+        print '-----'
+        print 'Restart at ' + now.strftime('%H:%M:%S')
+        print '-----'
+
     print 'RRFSentinel version ' + s.version
     print 'Salon: ' + s.salon
     print 'Déclenchements: ' + str(s.declenchement)
     print 'Plage: ' + str(s.plage) + ' minutes'
     print 'Ban: ' + str(s.ban) + ' minutes'
     print 'Fair use: ' + str(s.fair_use)
-
-    now = datetime.datetime.now()
-    
-    print '----------'
-    print now.strftime('%Y-%m-%d')
-    print '----------'
 
     # Boucle principale
     while(True):
