@@ -133,7 +133,7 @@ def main(argv):
                             if s.ban_count[indicatif] <= s.fair_use:
                                 ban_time = s.ban
                             else:
-                                ban_time = int(tx)
+                                ban_time = int(tx) * 2
 
                             ban_timestamp = (now + datetime.timedelta(minutes = ban_time))
                             ban_clock = ban_timestamp.strftime('%H:%M:%S')
