@@ -34,6 +34,8 @@ salon_list = {
     },
 }
 
+porteuse = {}
+all = {}
 white_list = ['F5ZIN-L', 'R.R.F', 'R.R.F_V2', 'RRF', 'RRF3']
 ban_list = {}
 ban_count = {}
