@@ -94,10 +94,12 @@ def main(argv):
 
         if 'allExtended' in rrf_data:
             for data in rrf_data['allExtended']:
-                s.all[data[u'Indicatif'].encode('utf-8')] = [l.convert_time_to_second(data[u'Durée'])]
+                s.all[data[u'Indicatif'].encode('utf-8')] = [data[u'TX'], l.convert_time_to_second(data[u'Durée'])]
+
+        #print s.all
 
         for p in s.porteuse:
-            indicatif = p
+            indicatif = p.strip()
             tx = s.porteuse[p][0]
             date = s.porteuse[p][1].split(', ')
 
@@ -118,7 +120,10 @@ def main(argv):
                     if s.ban_count[indicatif] <= s.fair_use:
                         ban_time = s.ban
                     else:
-                        ban_time = int(tx) * 2
+                        if indicatif[-2:] == ' H':  # Si Hotspot
+                            ban_time = int(tx) * (s.ban_count[indicatif] - s.fair_use)
+                        else:                       # Sinon...
+                            ban_time = int(tx) * 2
 
                     ban_timestamp = (now + datetime.timedelta(minutes = ban_time))
                     ban_clock = ban_timestamp.strftime('%H:%M:%S')
@@ -129,12 +134,12 @@ def main(argv):
                     # Ban UDP
                     cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif +'\''
                     os.system(cmd)
-                    print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
+                    print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
 
                     # Ban TCP
                     cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif +'\''
                     os.system(cmd)
-                    print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
+                    print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
 
         unban_list = []
 
@@ -153,6 +158,7 @@ def main(argv):
 
                 del s.ban_list[b]
 
+
         # If midnight
         if now.strftime('%H:%M') == '00:00':
             print '----------'
@@ -162,7 +168,7 @@ def main(argv):
             time.sleep(60)
 
         # If time < 06:00am, fair use only !
-        if now.strftime('%H:%M') < '06:00':
+        if now.strftime('%H:%M') < s.fair_use_time:
             # Reset ban_count
             s.ban_count.clear()
         
