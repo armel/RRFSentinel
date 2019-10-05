@@ -40,9 +40,9 @@ def save_stat(stat, indicatif, ban_time):
 # Save stats
 def save_horodatage(horodatage, indicatif, ban_date, ban_time, ban_end):
     try:
-        horodatage[indicatif].append((ban_date, ban_time, ban_end))
+        horodatage[indicatif].append((ban_date, ban_time, ban_end[:8]))
     except KeyError:
-        horodatage[indicatif] = [(ban_date, ban_time, ban_end)]
+        horodatage[indicatif] = [(ban_date, ban_time, ban_end[:8])]
 
     return horodatage
 
@@ -128,7 +128,7 @@ def main(argv):
         b = 1
         for t in horodatage[s[0]]:
             print '\t-> Ban %02d' % b,
-            print 'à', t[0] + ' pour ' + str(t[1]) + ' minutes' + '(à ' + t[2] + ')'
+            print 'à', t[0] + ' pour ' + str(t[1]) + ' minutes' + ' (Unban à ' + t[2] + ')'
             b += 1
 
         print 'Total\t=>',
