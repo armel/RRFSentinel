@@ -81,7 +81,7 @@ def main(argv):
 
         # Request HTTP datas
         try:
-            r = requests.get(s.salon_list[s.salon]['url'], verify=False, timeout=1)
+            r = requests.get(s.salon_list[s.salon]['url'], verify=False, timeout=5)
             rrf_data = r.json()
         except requests.exceptions.ConnectionError as errc:
             print ('Error Connecting:', errc)
