@@ -38,11 +38,11 @@ def save_stat(stat, indicatif, ban_time):
     return stat
 
 # Save stats
-def save_horodatage(horodatage, indicatif, ban_date, ban_time):
+def save_horodatage(horodatage, indicatif, ban_date, ban_time, ban_end):
     try:
-        horodatage[indicatif].append((ban_date, ban_time))
+        horodatage[indicatif].append((ban_date, ban_time, ban_end))
     except KeyError:
-        horodatage[indicatif] = [(ban_date, ban_time)]
+        horodatage[indicatif] = [(ban_date, ban_time, ban_end)]
 
     return horodatage
 
@@ -103,7 +103,7 @@ def main(argv):
                     if '<<' not in element[1]:
                         if 'udp --dport 5300' in element[5]:
                             stat = save_stat(stat, element[1], int(element[4]))
-                            horodatage = save_horodatage(horodatage, element[1], element[0], int(element[4]))
+                            horodatage = save_horodatage(horodatage, element[1], element[0], int(element[4]), element[5])
 
 
     stat = sorted(stat.items(), key=lambda x: x[1][1])
@@ -128,7 +128,7 @@ def main(argv):
         b = 1
         for t in horodatage[s[0]]:
             print '\t-> Ban %02d' % b,
-            print 'à', t[0] + ' pour ' + str(t[1]) + ' minutes'
+            print 'à', t[0] + ' pour ' + str(t[1]) + ' minutes' + '(à ' + t[2] + ')'
             b += 1
 
         print 'Total\t=>',

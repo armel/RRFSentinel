@@ -82,97 +82,82 @@ def main(argv):
         # Request HTTP datas
         try:
             r = requests.get(s.salon_list[s.salon]['url'], verify=False, timeout=1)
-            page = r.content
+            rrf_data = r.json()
         except requests.exceptions.ConnectionError as errc:
             print ('Error Connecting:', errc)
         except requests.exceptions.Timeout as errt:
             print ('Timeout Error:', errt)
 
+        if 'porteuseExtended' in rrf_data:
+            for data in rrf_data['porteuseExtended']:
+                s.porteuse[data[u'Indicatif'].encode('utf-8')] = [data[u'TX'], data[u'Date']]
 
-        #print plage_start, plage_stop
+        if 'allExtended' in rrf_data:
+            for data in rrf_data['allExtended']:
+                s.all[data[u'Indicatif'].encode('utf-8')] = [data[u'TX'], l.convert_time_to_second(data[u'Durée'])]
 
-        start = None
-        line = page.split('\n')
+        #print s.all
 
-        try:
-            start = line.index('"porteuseExtended":')
-        except ValueError:
-            print('Problème de lecture du fichier JSON')
+        for p in s.porteuse:
+            indicatif = p.strip()
+            tx = s.porteuse[p][0]
+            date = s.porteuse[p][1].split(', ')
 
-        if start != None:
+            #print indicatif, tx, date
 
-            if line[start + 2] != '],':
+            if indicatif not in s.white_list:
+                count = 0
+                for h in date:
+                    if h < plage_stop and h > plage_start:
+                        count += 1
 
-                start += 4
+                if count >= s.declenchement and indicatif in s.link_ip and indicatif not in s.ban_list:
+                    try:
+                        s.ban_count[indicatif] += 1
+                    except KeyError:
+                        s.ban_count[indicatif] = 1
 
-                while(True):
-                    indicatif = line[start].strip()
-                    indicatif = indicatif[14:-2]
-
-                    start += 1
-                    tx = line[start].strip()
-                    tx = tx[6:-1]
-
-                    start += 1
-                    date = line[start].strip()
-                    date = date[9:-1]
-                    date = date.split(', ')
-
-                    if indicatif not in s.white_list:
-                        count = 0
-                        for h in date:
-                            if h < plage_stop and h > plage_start:
-                                count += 1
-
-                        if count >= s.declenchement and indicatif in s.link_ip and indicatif not in s.ban_list:
-                            try:
-                                s.ban_count[indicatif] += 1
-                            except KeyError:
-                                s.ban_count[indicatif] = 1
-
-                            if s.ban_count[indicatif] <= s.fair_use:
-                                ban_time = s.ban
-                            else:
-                                ban_time = int(tx) * 2
-
-                            ban_timestamp = (now + datetime.timedelta(minutes = ban_time))
-                            ban_clock = ban_timestamp.strftime('%H:%M:%S')
-                            ban_timestamp = time.mktime(ban_timestamp.timetuple())
-
-                            s.ban_list[indicatif] = ban_timestamp
-
-                            # Ban UDP
-                            cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif +'\''
-                            os.system(cmd)
-                            print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
-
-                            # Ban TCP
-                            cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif +'\''
-                            os.system(cmd)
-                            print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
-
-                    start += 2
-                    if line[start] == '],':
-                        break
+                    if s.ban_count[indicatif] <= s.fair_use:
+                        ban_time = s.ban
                     else:
-                        start += 2
+                        if indicatif[-2:] == ' H':  # Si Hotspot
+                            ban_time = int(tx) * (s.ban_count[indicatif] - s.fair_use)
+                        else:                       # Sinon...
+                            ban_time = int(tx) * 2
 
-                unban_list = []
+                    ban_timestamp = (now + datetime.timedelta(minutes = ban_time))
+                    ban_clock = ban_timestamp.strftime('%H:%M:%S')
+                    ban_timestamp = time.mktime(ban_timestamp.timetuple())
 
-                for b in s.ban_list:
-                    if time.mktime(now.timetuple()) > s.ban_list[b]:
-                        unban_list.append(b)
+                    s.ban_list[indicatif] = ban_timestamp
 
-                if unban_list:
-                    for b in unban_list:
-                        cmd = 'iptables -D INPUT -s ' + s.link_ip[b] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b +'\''
-                        os.system(cmd)
-                        print plage_stop + ' - ' + b + ' << ' + cmd
-                        cmd = 'iptables -D INPUT -s ' + s.link_ip[b] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b +'\''
-                        os.system(cmd)
-                        print plage_stop + ' - ' + b + ' << ' + cmd
+                    # Ban UDP
+                    cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif +'\''
+                    os.system(cmd)
+                    print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
 
-                        del s.ban_list[b]
+                    # Ban TCP
+                    cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif +'\''
+                    os.system(cmd)
+                    print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
+
+        unban_list = []
+
+        for b in s.ban_list:
+            if time.mktime(now.timetuple()) > s.ban_list[b]:
+                unban_list.append(b)
+
+        if unban_list:
+            for b in unban_list:
+                cmd = 'iptables -D INPUT -s ' + s.link_ip[b] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b +'\''
+                os.system(cmd)
+                print plage_stop + ' - ' + b + ' << ' + cmd
+                cmd = 'iptables -D INPUT -s ' + s.link_ip[b] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b +'\''
+                os.system(cmd)
+                print plage_stop + ' - ' + b + ' << ' + cmd
+
+                del s.ban_list[b]
+
 
         # If midnight
         if now.strftime('%H:%M') == '00:00':
@@ -183,7 +168,7 @@ def main(argv):
             time.sleep(60)
 
         # If time < 06:00am, fair use only !
-        if now.strftime('%H:%M') < '06:00':
+        if now.strftime('%H:%M') < s.fair_use_time:
             # Reset ban_count
             s.ban_count.clear()
         

@@ -18,7 +18,7 @@ La RRFSentinel utilise donc les informations collectées par le RRFTracker. Elle
 
 La RRFSentinel applique une règle générique qui, si elle est vérifiée, entrainera une action de banissement. Cette règle peut être énnoncée ainsi: à partir d'une nombre N de déclenchements intempestifs dans une laps de temps L, un bannissement sera appliqué au link responsable pour une durée D.
 
-Aujourd'hui, le nombre N est égal à 3 et le laps de temps L a été fixé à 5 minutes.
+Aujourd'hui, le nombre N est égal à 4 et le laps de temps L a été fixé à 5 minutes.
 
 ### Un bannissement variable
 
@@ -32,22 +32,15 @@ La durée de bannissement est fixée à 5 minutes entre 00:00 AM et 06:00 AM.
 
 #### Plus un link perturbe le RRF, plus longtemps il sera banni
 
-Au délà, la durée de bannissement est fixée au nombre de déclenchements intempestifs mesuré depuis le début de la journée. 
+Au délà, la durée de bannissement est fixée au nombre de déclenchements intempestifs mesuré depuis le début de la journée multiplié par 2 ! 
 
 ## Mise en oeuvre
 
-Il est possible de lancer et arréter la RRFSentinel de la facon suivante. Sur les serveur 1 et 3:
+Il est possible de lancer et arréter la RRFSentinel de la facon suivante. Sur les serveur 1 et 3 :
 
 ```
 /opt/RRFSentinel/RRFSentinel_RRF.sh start
 /opt/RRFSentinel/RRFSentinel_RRF.sh stop
-```
-
-Sur le serveur 2:
-
-```
-/opt/RRFSentinel/RRFSentinel_RRF_V1.sh start
-/opt/RRFSentinel/RRFSentinel_RRF_V1.sh stop
 ```
 
 ## Monitoring
@@ -58,7 +51,7 @@ Il est possible de suivre l'activité de la RRFSentinel dans la journée, via un
 /opt/RRFSentinel/stats.py
 ```
 
-Pour consulter l'activité sur une autre journée, il suffit d'indiquer la date en argument
+Pour consulter l'activité sur une autre journée, il suffit d'indiquer la date en argument :
 
 ```
 /opt/RRFSentinel/stats.py --day YYYY-MM-DD
