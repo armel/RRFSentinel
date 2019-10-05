@@ -128,7 +128,7 @@ def main(argv):
         b = 1
         for t in horodatage[s[0]]:
             print '\t-> Ban %02d' % b,
-            print 'à', t[0] + ' pour ' + str(t[1]) + ' minutes' + ' (Unban à ' + t[2] + ')'
+            print 'à', t[0] + ' pour ' + str(t[1]) + ' minutes' + ' (' + t[2] + ')'
             b += 1
 
         print 'Total\t=>',
