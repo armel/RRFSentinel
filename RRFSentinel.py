@@ -81,66 +81,70 @@ def main(argv):
 
         # Request HTTP datas
         try:
-            r = requests.get(s.salon_list[s.salon]['url'], verify=False, timeout=5)
-            rrf_data = r.json()
+            r = requests.get(s.salon_list[s.salon]['url'], verify=False, timeout=1)
         except requests.exceptions.ConnectionError as errc:
             print ('Error Connecting:', errc)
         except requests.exceptions.Timeout as errt:
             print ('Timeout Error:', errt)
 
-        if 'porteuseExtended' in rrf_data:
-            for data in rrf_data['porteuseExtended']:
-                s.porteuse[data[u'Indicatif'].encode('utf-8')] = [data[u'TX'], data[u'Date']]
+        try:
+            rrf_data = r.json()
 
-        if 'allExtended' in rrf_data:
-            for data in rrf_data['allExtended']:
-                s.all[data[u'Indicatif'].encode('utf-8')] = [data[u'TX'], l.convert_time_to_second(data[u'Durée'])]
+            if 'porteuseExtended' in rrf_data:
+                for data in rrf_data['porteuseExtended']:
+                    s.porteuse[data[u'Indicatif'].encode('utf-8')] = [data[u'TX'], data[u'Date']]
 
-        #print s.all
+            if 'allExtended' in rrf_data:
+                for data in rrf_data['allExtended']:
+                    s.all[data[u'Indicatif'].encode('utf-8')] = [data[u'TX'], l.convert_time_to_second(data[u'Durée'])]
 
-        for p in s.porteuse:
-            indicatif = p.strip()
-            tx = s.porteuse[p][0]
-            date = s.porteuse[p][1].split(', ')
+            for p in s.porteuse:
+                indicatif = p.strip()
+                tx = s.porteuse[p][0]
+                date = s.porteuse[p][1].split(', ')
 
-            #print indicatif, tx, date
+                #print indicatif, tx, date
 
-            if indicatif not in s.white_list:
-                count = 0
-                for h in date:
-                    if h < plage_stop and h > plage_start:
-                        count += 1
+                if indicatif not in s.white_list:
+                    count = 0
+                    for h in date:
+                        if h < plage_stop and h > plage_start:
+                            count += 1
 
-                if count >= s.declenchement and indicatif in s.link_ip and indicatif not in s.ban_list:
-                    try:
-                        s.ban_count[indicatif] += 1
-                    except KeyError:
-                        s.ban_count[indicatif] = 1
+                    if count >= s.declenchement and indicatif in s.link_ip and indicatif not in s.ban_list:
+                        try:
+                            s.ban_count[indicatif] += 1
+                        except KeyError:
+                            s.ban_count[indicatif] = 1
 
-                    if s.ban_count[indicatif] <= s.fair_use:
-                        ban_time = s.ban
-                    else:
-                        if indicatif[-2:] == ' H':  # Si Hotspot
-                            ban_time = int(tx) * (s.ban_count[indicatif] - s.fair_use)
-                        else:                       # Sinon...
-                            ban_time = int(tx) * 2
+                        if s.ban_count[indicatif] <= s.fair_use:
+                            ban_time = s.ban
+                        else:
+                            if indicatif[-2:] == ' H':  # Si Hotspot
+                                ban_time = int(tx) * (s.ban_count[indicatif] - s.fair_use)
+                            else:                       # Sinon...
+                                ban_time = int(tx) * 2
 
-                    ban_timestamp = (now + datetime.timedelta(minutes = ban_time))
-                    ban_clock = ban_timestamp.strftime('%H:%M:%S')
-                    ban_timestamp = time.mktime(ban_timestamp.timetuple())
+                        ban_timestamp = (now + datetime.timedelta(minutes = ban_time))
+                        ban_clock = ban_timestamp.strftime('%H:%M:%S')
+                        ban_timestamp = time.mktime(ban_timestamp.timetuple())
 
-                    s.ban_list[indicatif] = ban_timestamp
+                        s.ban_list[indicatif] = ban_timestamp
 
-                    # Ban UDP
-                    cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif +'\''
-                    os.system(cmd)
-                    print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
+                        # Ban UDP
+                        cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif +'\''
+                        os.system(cmd)
+                        print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
 
-                    # Ban TCP
-                    cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif +'\''
-                    os.system(cmd)
-                    print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
+                        # Ban TCP
+                        cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif +'\''
+                        os.system(cmd)
+                        print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
 
+        except:
+            print now.strftime('%Y-%m-%d') + ' Fail read json !!!'
+
+        # Unban check
         unban_list = []
 
         for b in s.ban_list:
@@ -158,7 +162,6 @@ def main(argv):
 
                 del s.ban_list[b]
 
-
         # If midnight
         if now.strftime('%H:%M') == '00:00':
             print '----------'
@@ -171,9 +174,8 @@ def main(argv):
         if now.strftime('%H:%M') < s.fair_use_time:
             # Reset ban_count
             s.ban_count.clear()
-        
-        time.sleep(2)
 
+        time.sleep(2)
         sys.stdout.flush()
 
 if __name__ == '__main__':
