@@ -142,7 +142,7 @@ def main(argv):
                         print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
 
         except:
-            print now.strftime('%Y-%m-%d') + ' Fail read json !!!'
+            pass
 
         # Unban check
         unban_list = []
