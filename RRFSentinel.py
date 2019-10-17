@@ -92,6 +92,7 @@ def main(argv):
 
         try:
             rrf_data = r.json()
+            print rrf_data
 
             if 'porteuseExtended' in rrf_data:
                 for data in rrf_data['porteuseExtended']:
@@ -136,12 +137,12 @@ def main(argv):
 
                         # Ban UDP
                         cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif +'\''
-                        os.system(cmd)
+                        #os.system(cmd)
                         print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
 
                         # Ban TCP
                         cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif +'\''
-                        os.system(cmd)
+                        #os.system(cmd)
                         print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
 
         except:
@@ -157,10 +158,10 @@ def main(argv):
         if unban_list:
             for b in unban_list:
                 cmd = 'iptables -D INPUT -s ' + s.link_ip[b] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b +'\''
-                os.system(cmd)
+                #os.system(cmd)
                 print plage_stop + ' - ' + b + ' << ' + cmd
                 cmd = 'iptables -D INPUT -s ' + s.link_ip[b] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b +'\''
-                os.system(cmd)
+                #os.system(cmd)
                 print plage_stop + ' - ' + b + ' << ' + cmd
 
                 del s.ban_list[b]
