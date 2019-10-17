@@ -106,22 +106,13 @@ def main(argv):
                 tx = s.porteuse[p][0]
                 date = s.porteuse[p][1].split(', ')
 
-                print indicatif, tx, date
+                #print indicatif, tx, date
 
                 if indicatif not in s.white_list:
                     count = 0
                     for h in date:
                         if h < plage_stop and h > plage_start:
                             count += 1
-
-                    if count >= s.declenchement:
-                        print indicatif, 'test 1 oui'
-                    if indicatif in s.link_ip:
-                        print indicatif, 'test 2 oui'
-                    else:
-                        print s.link_ip
-                    if indicatif not in s.ban_list:
-                        print indicatif, 'test 3 oui'
 
                     if count >= s.declenchement and indicatif in s.link_ip and indicatif not in s.ban_list:
                         try:
@@ -146,12 +137,12 @@ def main(argv):
                         # Ban UDP
                         cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif +'\''
                         os.system(cmd)
-                        print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
+                        print day + ' ' + plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
 
                         # Ban TCP
                         cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif +'\''
                         os.system(cmd)
-                        print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
+                        print day + ' ' + plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
 
         except:
             pass
@@ -167,10 +158,10 @@ def main(argv):
             for b in unban_list:
                 cmd = 'iptables -D INPUT -s ' + s.link_ip[b] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b +'\''
                 os.system(cmd)
-                print plage_stop + ' - ' + b + ' << ' + cmd
+                print day + ' ' + plage_stop + ' - ' + b + ' << ' + cmd
                 cmd = 'iptables -D INPUT -s ' + s.link_ip[b] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b +'\''
                 os.system(cmd)
-                print plage_stop + ' - ' + b + ' << ' + cmd
+                print day + ' ' + plage_stop + ' - ' + b + ' << ' + cmd
 
                 del s.ban_list[b]
 
