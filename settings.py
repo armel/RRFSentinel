@@ -28,7 +28,7 @@ fair_use_time = '06:00' # heure de ban avant application de la règle strict
 
 salon_list = {
     'RRF': {
-        'url': 'http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-',
+        'url': 'http://rrf.f5nlg.ovh:8080/RRFTracker/INTERNATIONAL-',
     }
 }
 
