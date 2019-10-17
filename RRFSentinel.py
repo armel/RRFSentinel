@@ -115,7 +115,7 @@ def main(argv):
                             count += 1
 
                     print count, s.declenchement
-                    if indicatif in s.link_ip;
+                    if indicatif in s.link_ip:
                          print 'oui'
                     if count >= s.declenchement and indicatif in s.link_ip and indicatif not in s.ban_list:
                         try:
