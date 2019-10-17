@@ -118,6 +118,8 @@ def main(argv):
                         print indicatif, 'test 1 oui'
                     if indicatif in s.link_ip:
                         print indicatif, 'test 2 oui'
+                    else:
+                        print s.link_ip
                     if indicatif not in s.ban_list:
                         print indicatif, 'test 3 oui'
 
