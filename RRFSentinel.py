@@ -77,7 +77,7 @@ def main(argv):
         plage_stop = now.strftime('%H:%M:%S')
         plage_start = (now - datetime.timedelta(minutes = s.plage)).strftime('%H:%M:%S')
 
-        #l.read_log()
+        l.read_log()
 
         #print s.link_ip
         url = s.salon_list[s.salon]['url'] + day + '/rrf.json'
