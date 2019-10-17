@@ -134,10 +134,11 @@ def main(argv):
 
                         s.ban_list[indicatif] = ban_timestamp
 
+                        print url
                         print plage_start, plage_stop
                         print indicatif, tx
                         print date
-                        
+
                         # Ban UDP
                         cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif +'\''
                         os.system(cmd)
