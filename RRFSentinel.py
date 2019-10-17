@@ -114,9 +114,8 @@ def main(argv):
                         if h < plage_stop and h > plage_start:
                             count += 1
 
-                    print count
-
                     if count >= s.declenchement and indicatif in s.link_ip and indicatif not in s.ban_list:
+                        print "la"
                         try:
                             s.ban_count[indicatif] += 1
                         except KeyError:
