@@ -109,11 +109,12 @@ def main(argv):
                 print indicatif, tx, date
 
                 if indicatif not in s.white_list:
-                    print 'ici'
                     count = 0
                     for h in date:
                         if h < plage_stop and h > plage_start:
                             count += 1
+
+                    print count
 
                     if count >= s.declenchement and indicatif in s.link_ip and indicatif not in s.ban_list:
                         try:
