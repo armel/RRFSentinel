@@ -92,7 +92,6 @@ def main(argv):
 
         try:
             rrf_data = r.json()
-            print rrf_data
 
             if 'porteuseExtended' in rrf_data:
                 for data in rrf_data['porteuseExtended']:
