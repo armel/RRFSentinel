@@ -115,6 +115,7 @@ def main(argv):
                             count += 1
 
                     if count >= s.declenchement and indicatif in s.link_ip and indicatif not in s.ban_list:
+                        print 'ici'
                         try:
                             s.ban_count[indicatif] += 1
                         except KeyError:
