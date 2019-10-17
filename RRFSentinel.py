@@ -114,8 +114,14 @@ def main(argv):
                         if h < plage_stop and h > plage_start:
                             count += 1
 
+                    if count >= s.declenchement:
+                        print indicatif, 'test 1 oui'
+                    if indicatif in s.link_ip:
+                        print indicatif, 'test 2 oui'
+                    if indicatif not in s.ban_list:
+                        print indicatif, 'test 3 oui'
+
                     if count >= s.declenchement and indicatif in s.link_ip and indicatif not in s.ban_list:
-                        print 'ici'
                         try:
                             s.ban_count[indicatif] += 1
                         except KeyError:
