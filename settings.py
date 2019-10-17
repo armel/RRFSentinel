@@ -15,7 +15,7 @@ On ban pour 15 minutes
 
 # Version
 
-version = '1.1.0'
+version = '1.1.1'
 
 # Variables par defaut
 
@@ -28,7 +28,7 @@ fair_use_time = '06:00' # heure de ban avant application de la règle strict
 
 salon_list = {
     'RRF': {
-        'url': 'http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf.json',
+        'url': 'http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-',
     }
 }
 
