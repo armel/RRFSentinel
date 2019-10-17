@@ -106,7 +106,7 @@ def main(argv):
                 tx = s.porteuse[p][0]
                 date = s.porteuse[p][1].split(', ')
 
-                #print indicatif, tx, date
+                print indicatif, tx, date
 
                 if indicatif not in s.white_list:
                     count = 0
