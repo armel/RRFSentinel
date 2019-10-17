@@ -116,7 +116,7 @@ def main(argv):
 
         for t in horodatage[s[0]]:
             tmp = (now - datetime.timedelta(minutes = t[1])).strftime('%H:%M:%S')
-            if t[0] > tmp:
+            if t[0][-8:] > tmp:
                 is_ban = True
                 break
 
