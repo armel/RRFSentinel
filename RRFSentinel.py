@@ -134,15 +134,19 @@ def main(argv):
 
                         s.ban_list[indicatif] = ban_timestamp
 
+                        print plage_start, plage_stop
+                        print indicatif, tx
+                        print date
+                        
                         # Ban UDP
                         cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif +'\''
                         os.system(cmd)
-                        print day + ' ' + plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
+                        print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
 
                         # Ban TCP
                         cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif +'\''
                         os.system(cmd)
-                        print day + ' ' + plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
+                        print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
 
         except:
             pass
@@ -158,10 +162,10 @@ def main(argv):
             for b in unban_list:
                 cmd = 'iptables -D INPUT -s ' + s.link_ip[b] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b +'\''
                 os.system(cmd)
-                print day + ' ' + plage_stop + ' - ' + b + ' << ' + cmd
+                print plage_stop + ' - ' + b + ' << ' + cmd
                 cmd = 'iptables -D INPUT -s ' + s.link_ip[b] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b +'\''
                 os.system(cmd)
-                print day + ' ' + plage_stop + ' - ' + b + ' << ' + cmd
+                print plage_stop + ' - ' + b + ' << ' + cmd
 
                 del s.ban_list[b]
 
