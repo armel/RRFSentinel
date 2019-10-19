@@ -137,6 +137,7 @@ def main(argv):
                         print url
                         print plage_start, plage_stop
                         print indicatif, tx
+                        print s.porteuse
                         print date
 
                         # Ban UDP
@@ -176,6 +177,7 @@ def main(argv):
             print now.strftime('%Y-%m-%d')
             print '----------'
             # Waiting during RRFTracker init...
+            s.porteuse.clear()
             time.sleep(60)
 
         # If time < 06:00am, fair use only !
