@@ -72,19 +72,15 @@ def main(argv):
     # Boucle principale
     while(True):
         now = datetime.datetime.now()
-        day = now.strftime('%Y-%m-%d')
 
         plage_stop = now.strftime('%H:%M:%S')
         plage_start = (now - datetime.timedelta(minutes = s.plage)).strftime('%H:%M:%S')
 
         l.read_log()
 
-        #print s.link_ip
-        url = s.salon_list[s.salon]['url'] + day + '/rrf.json'
-
         # Request HTTP datas
         try:
-            r = requests.get(url, verify=False, timeout=1)
+            r = requests.get(s.salon_list[s.salon]['url'], verify=False, timeout=1)
         except requests.exceptions.ConnectionError as errc:
             print ('Error Connecting:', errc)
         except requests.exceptions.Timeout as errt:
@@ -134,11 +130,10 @@ def main(argv):
 
                         s.ban_list[indicatif] = ban_timestamp
 
-                        print url
-                        print plage_start, plage_stop
-                        print indicatif, tx
-                        print s.porteuse
-                        print date
+                        #print plage_start, plage_stop
+                        #print indicatif, tx
+                        #print s.porteuse
+                        #print date
 
                         # Ban UDP
                         cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif +'\''

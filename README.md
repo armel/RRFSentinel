@@ -12,27 +12,30 @@ Un déclenchement intempestif est un passage en émission dont la durée est inf
 
 La RRFSentinel fonctionne de concert avec le RRFTracker. Ce dernier collecte tout un tas d'informations dont, entre autres, les déclenchements intempestifs (indicatif du link, horodatage, décompte, etc.).
 
-La RRFSentinel utilise donc les informations collectées par le RRFTracker. Elle va les analyser et appliquer des règles de bannissement si nécessaire.
+La RRFSentinel utilise donc les informations collectées par le RRFTracker. Elle va les analyser et appliquer des règles de mise en quarantaine si nécessaire.
 
 ### Une règle générique
 
-La RRFSentinel applique une règle générique qui, si elle est vérifiée, entrainera une action de banissement. Cette règle peut être énnoncée ainsi: à partir d'une nombre N de déclenchements intempestifs dans une laps de temps L, un bannissement sera appliqué au link responsable pour une durée D.
+La RRFSentinel applique une règle générique qui, si elle est vérifiée, entrainera une action de mise en quarantaine. Cette règle peut être énnoncée ainsi: à partir d'une nombre N de déclenchements intempestifs dans une laps de temps L, une mise en quarantaine sera appliquée au link responsable pour une durée D.
 
 Aujourd'hui, le nombre N est égal à 4 et le laps de temps L a été fixé à 5 minutes.
 
-### Un bannissement variable
+### Une mise en quarantaine variable
 
 #### Fair use N°1
 
-La durée de bannissement est fixée à 5 minutes entre 00:00 AM et 06:00 AM. 
+La durée de mise en quarantaine est fixée à 5 minutes entre 00:00 AM et 06:00 AM. 
 
 #### Fair use N°2
 
-À partir de 06:00 AM, la durée de bannissement est toujours fixée à 5 minutes mais uniquement lors des 3 premiers bannissement.
+À partir de 06:00 AM, la durée de mise en quarantaine est toujours fixée à 5 minutes mais uniquement lors des 3 premières fois.
 
-#### Plus un link perturbe le RRF, plus longtemps il sera banni
+#### Plus un link perturbe le RRF, plus longtemps il sera placé en quarantaine
 
-Au délà, la durée de bannissement est fixée au nombre de déclenchements intempestifs mesuré depuis le début de la journée multiplié par 2 ! 
+Au délà, la durée de mise en quarantaine est calculée ainsi :
+
+- pour un link : (nombre de déclenchements intempestifs depuis le début de la journée) x 2
+- pour un hotspot : (nombre de déclenchements intempestifs depuis le début de la journée) x (nombre de mises en quarantaine - 3)
 
 ## Mise en oeuvre
 
