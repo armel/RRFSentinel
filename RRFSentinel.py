@@ -89,12 +89,12 @@ def main(argv):
         try:
             rrf_data = r.json()
 
-            if 'porteuseExtended' in rrf_data:
-                for data in rrf_data['porteuseExtended']:
+            if 'porteuse' in rrf_data:
+                for data in rrf_data['porteuse']:
                     s.porteuse[data[u'Indicatif'].encode('utf-8')] = [data[u'TX'], data[u'Date']]
 
-            if 'allExtended' in rrf_data:
-                for data in rrf_data['allExtended']:
+            if 'all' in rrf_data:
+                for data in rrf_data['all']:
                     s.all[data[u'Indicatif'].encode('utf-8')] = [data[u'TX'], l.convert_time_to_second(data[u'Durée'])]
 
             for p in s.porteuse:
