@@ -93,9 +93,11 @@ def main(argv):
                 for data in rrf_data['porteuse']:
                     s.porteuse[data[u'Indicatif'].encode('utf-8')] = [data[u'TX'], data[u'Date']]
 
+            '''
             if 'all' in rrf_data:
                 for data in rrf_data['all']:
                     s.all[data[u'Indicatif'].encode('utf-8')] = [data[u'TX'], l.convert_time_to_second(data[u'Durée'])]
+            '''
 
             for p in s.porteuse:
                 indicatif = p.strip()
@@ -128,7 +130,7 @@ def main(argv):
                         ban_clock = ban_timestamp.strftime('%H:%M:%S')
                         ban_timestamp = time.mktime(ban_timestamp.timetuple())
 
-                        s.ban_list[indicatif] = ban_timestamp
+                        s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif])
 
                         #print plage_start, plage_stop
                         #print indicatif, tx
@@ -149,18 +151,29 @@ def main(argv):
             pass
 
         # Unban check
-        unban_list = []
+        unban_list = {}
 
         for b in s.ban_list:
-            if time.mktime(now.timetuple()) > s.ban_list[b]:
-                unban_list.append(b)
+            if time.mktime(now.timetuple()) > s.ban_list[b][0]:
+                unban_list[b] = (s.ban_list[b][0], s.ban_list[b][1])
 
         if unban_list:
             for b in unban_list:
+                # Unban current reflector IP
                 cmd = 'iptables -D INPUT -s ' + s.link_ip[b] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b +'\''
                 os.system(cmd)
                 print plage_stop + ' - ' + b + ' << ' + cmd
+
                 cmd = 'iptables -D INPUT -s ' + s.link_ip[b] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b +'\''
+                os.system(cmd)
+                print plage_stop + ' - ' + b + ' << ' + cmd
+
+                # Unban old reflextor IP (at ban time... by security)
+                cmd = 'iptables -D INPUT -s ' + unban_list[b][1] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b +'\''
+                os.system(cmd)
+                print plage_stop + ' - ' + b + ' << ' + cmd
+
+                cmd = 'iptables -D INPUT -s ' + unban_list[b][1] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b +'\''
                 os.system(cmd)
                 print plage_stop + ' - ' + b + ' << ' + cmd
 
