@@ -8,8 +8,17 @@ Learn more about RRF on https://f5nlg.wordpress.com
 '''
 
 '''
-Si le nombre de déclemenets et supérieur ou égale à 4
-Sur une durée de 1 minute
+Intempestif
+
+Sur une plage d'une durée de 5 minutes
+Si le nombre de déclenchement est supérieur ou égale à 4
+On ban pour 5 minutes
+
+Campeur
+
+Sur une plage d'une durée de 30 minutes
+Si le nombre de passage en émission est supérieur ou égale à 10
+Et que le temps d'émission est supérieur ou égale à 360
 On ban pour 15 minutes
 '''
 
@@ -19,11 +28,19 @@ version = '1.2.0'
 
 # Variables par defaut
 
-salon = 'RRF'           # room a surveiller
-declenchement = 4       # nombre max de déclenchements suspects 
-plage = 5               # durée de la plage de déclenchements en minutes
-ban = 5                 # durée de la quarantaine en minutes
-fair_use = 3            # nombre de ban avant application de la règle strict
+salon = 'RRF'                   # room a surveiller
+
+intempestif_plage = 5           # durée de la plage de déclenchements en minutes
+intempestif_ban = 5             # durée de la quarantaine en minutes
+intempestif_tx = 4              # nombre max de déclenchements suspects 
+intempestif_fair_use = 3        # nombre de ban avant application de la règle strict
+
+campeur_plage = 30              # durée de la plage de déclenchements en minutes
+campeur_ban = 15                # durée de la quarantaine en minutes
+campeur_tx = 10                 # nombre max de passage en émission
+campeur_bf = 360                # nombre max de seconde en émission
+campeur_fair_use = 1            # nombre de ban avant application de la règle strict
+
 fair_use_time = '06:00' # heure de ban avant application de la règle strict
 
 salon_list = {

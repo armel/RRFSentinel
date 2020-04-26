@@ -19,30 +19,6 @@ import getopt
 
 def main(argv):
 
-    # Check and get arguments
-    try:
-        options, remainder = getopt.getopt(argv, '', ['help', 'salon=', 'declenchement=', 'plage=', 'ban=', 'fair-use='])
-    except getopt.GetoptError:
-        l.usage()
-        sys.exit(2)
-    for opt, arg in options:
-        if opt == '--help':
-            l.usage()
-            sys.exit()
-        elif opt in ('--salon'):
-            if arg not in ['RRF', 'RRF_V1']:
-                print 'Nom de salon inconnu (choisir parmi \'RRF\' ou \'RRF_V1\')'
-                sys.exit()
-            s.salon = arg
-        elif opt in ('--declenchement'):
-            s.declenchement = int(arg)
-        elif opt in ('--plage'):
-            s.plage = int(arg)
-        elif opt in ('--ban'):
-            s.ban = int(arg)
-        elif opt in ('--fair-use'):
-            s.fair_use = int(arg)
-
     now = datetime.datetime.now()
     day = now.strftime('%Y-%m-%d')
 
@@ -64,17 +40,27 @@ def main(argv):
 
     print 'RRFSentinel version ' + s.version
     print 'Salon: ' + s.salon
-    print 'Déclenchements: ' + str(s.declenchement)
-    print 'Plage: ' + str(s.plage) + ' minutes'
-    print 'Ban: ' + str(s.ban) + ' minutes'
-    print 'Fair use: ' + str(s.fair_use)
+    print '-----'
+    print 'Intempestif settings'
+    print 'Plage: ' + str(s.intempestif_plage) + ' minutes'
+    print 'Ban: ' + str(s.intempestif_ban) + ' minutes'
+    print 'Déclenchements: ' + str(s.intempestif_tx)
+    print 'Fair use: ' + str(s.intempestif_fair_use)
+    print '-----'
+    print 'Campeur settings'
+    print 'Plage: ' + str(s.campeur_plage) + ' minutes'
+    print 'Ban: ' + str(s.campeur_ban) + ' minutes'
+    print 'Passage en émission: ' + str(s.campeur_tx)
+    print 'Durée en émission: ' + str(s.campeur_bf)
+    print 'Fair use: ' + str(s.campeur_fair_use)
 
     # Boucle principale
     while(True):
         now = datetime.datetime.now()
 
         plage_stop = now.strftime('%H:%M:%S')
-        plage_start = (now - datetime.timedelta(minutes = s.plage)).strftime('%H:%M:%S')
+        plage_start_intempestif = (now - datetime.timedelta(minutes = s.intempestif_plage)).strftime('%H:%M:%S')
+        plage_start_campeur = (now - datetime.timedelta(minutes = s.campeur_plage)).strftime('%H:%M:%S')
 
         l.read_log()
 
@@ -89,15 +75,13 @@ def main(argv):
         try:
             rrf_data = r.json()
 
+            #
+            # Gestion des intempestifs
+            #
+
             if 'porteuse' in rrf_data:
                 for data in rrf_data['porteuse']:
                     s.porteuse[data[u'Indicatif'].encode('utf-8')] = [data[u'TX'], data[u'Date']]
-
-            '''
-            if 'all' in rrf_data:
-                for data in rrf_data['all']:
-                    s.all[data[u'Indicatif'].encode('utf-8')] = [data[u'TX'], l.convert_time_to_second(data[u'Durée'])]
-            '''
 
             for p in s.porteuse:
                 indicatif = p.strip()
@@ -109,20 +93,20 @@ def main(argv):
                 if indicatif not in s.white_list:
                     count = 0
                     for h in date:
-                        if h < plage_stop and h > plage_start:
+                        if h < plage_stop and h > plage_start_intempestif:
                             count += 1
 
-                    if count >= s.declenchement and indicatif in s.link_ip and indicatif not in s.ban_list:
+                    if count >= s.intempestif_tx and indicatif in s.link_ip and indicatif not in s.ban_list:
                         try:
                             s.ban_count[indicatif] += 1
                         except KeyError:
                             s.ban_count[indicatif] = 1
 
-                        if s.ban_count[indicatif] <= s.fair_use:
-                            ban_time = s.ban
+                        if s.ban_count[indicatif] <= s.intempestif_fair_use:
+                            ban_time = s.intempestif_ban
                         else:
                             if indicatif[-2:] == ' H':  # Si Hotspot
-                                ban_time = int(tx) * (s.ban_count[indicatif] - s.fair_use)
+                                ban_time = int(tx) * (s.ban_count[indicatif] - s.intempestif_fair_use)
                             else:                       # Sinon...
                                 ban_time = int(tx) * 2
 
@@ -131,11 +115,6 @@ def main(argv):
                         ban_timestamp = time.mktime(ban_timestamp.timetuple())
 
                         s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'INTEMPESTIF')
-
-                        #print plage_start, plage_stop
-                        #print indicatif, tx
-                        #print s.porteuse
-                        #print date
 
                         # Ban UDP
                         cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif + ' (INTEMPESTIF)\''
@@ -146,6 +125,44 @@ def main(argv):
                         cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif + ' (INTEMPESTIF)\''
                         os.system(cmd)
                         print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
+
+            #
+            # Gestion des campeurs
+            #
+
+            if 'all' in rrf_data:
+                for data in rrf_data['all']:
+                    indicatif = data[u'Indicatif'].encode('utf-8')
+
+                    if l.convert_time_to_second(data[u'Durée']) >= s.campeur_bf:
+                        bf = 0
+                        tx = 0
+                        h = data['Heure'].split(', ')
+                        c = data['Chrono'].split(', ')
+                        for t in xrange(len(h)):
+                            if h[t] >= plage_start_campeur and h[t] < plage_stop:
+                                tx += 1
+                                bf += l.convert_time_to_second(c[t])
+                                #print data[u'Indicatif'].encode('utf-8'), h[t], c[t], tx, bf, l.convert_second_to_time(bf)
+                        if tx >= 10 and bf >= 360:
+                            ban_timestamp = (now + datetime.timedelta(minutes = s.campeur_ban))
+                            ban_clock = ban_timestamp.strftime('%H:%M:%S')
+                            ban_timestamp = time.mktime(ban_timestamp.timetuple())
+
+                            s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'CAMPEUR')
+
+                            # Ban UDP
+                            cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif + ' (CAMPEUR)\''
+                            os.system(cmd)
+                            print plage_stop + ' - ' + indicatif + ' - [' + str(bf) + ' @ ' + str(tx) + '] - ' + str(s.campeur_ban) + ' - ' + ban_clock + ' >> ' + cmd
+
+                            # Ban TCP
+                            cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif + ' (CAMPEUR)\''
+                            os.system(cmd)
+                            print plage_stop + ' - ' + indicatif + ' - [' + str(bf) + ' @ ' + str(tx) + '] - ' + str(s.campeur_ban) + ' - ' + ban_clock + ' >> ' + cmd
+
+                    else:
+                        break
 
         except:
             pass
