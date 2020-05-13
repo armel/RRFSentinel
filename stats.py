@@ -87,7 +87,9 @@ def main(argv):
     total_ban = 0
     total_time = 0
 
-    with open('/root/F4HWN/RRFSentinel/RRFSentinel.log') as f:
+    log = '/root/F4HWN/RRFSentinel/RRFSentinel.log'
+
+    with open(log) as f:
         for line in f:
             if day in line:
                 find = True
@@ -156,7 +158,7 @@ def main(argv):
 
     # check pid
 
-    f = open('/tmp/RRFSentinel.pid')
+    f = open(log)
     tmp = f.readlines()
     pid = int(tmp[0].strip())
 
