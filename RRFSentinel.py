@@ -144,7 +144,7 @@ def main(argv):
                                 tx += 1
                                 bf += l.convert_time_to_second(c[t])
                                 #print(data['Indicatif'], h[t], c[t], tx, bf, l.convert_second_to_time(bf))
-                        if tx >= 10 and bf >= 360:
+                        if tx >= s.campeur_tx and bf >= s.campeur_bf:
                             ban_timestamp = (now + datetime.timedelta(minutes = s.campeur_ban))
                             ban_clock = ban_timestamp.strftime('%H:%M:%S')
                             ban_timestamp = time.mktime(ban_timestamp.timetuple())
