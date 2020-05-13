@@ -81,14 +81,14 @@ def main(argv):
 
             if 'porteuse' in rrf_data:
                 for data in rrf_data['porteuse']:
-                    s.porteuse[data['Indicatif'].encode('utf-8')] = [data['TX'], data['Date']]
+                    s.porteuse[data['Indicatif']] = [data['TX'], data['Date']]
 
             for p in s.porteuse:
                 indicatif = p.strip()
                 tx = s.porteuse[p][0]
                 date = s.porteuse[p][1].split(', ')
 
-                #print indicatif, tx, date
+                print indicatif, tx, date
 
                 if indicatif not in s.white_list:
                     count = 0
@@ -132,7 +132,7 @@ def main(argv):
 
             if 'all' in rrf_data:
                 for data in rrf_data['all']:
-                    indicatif = data['Indicatif'].encode('utf-8')
+                    indicatif = data['Indicatif']
 
                     if indicatif not in s.ban_list and l.convert_time_to_second(data['Durée']) >= s.campeur_bf:
                         bf = 0
@@ -143,7 +143,7 @@ def main(argv):
                             if h[t] >= plage_start_campeur and h[t] < plage_stop:
                                 tx += 1
                                 bf += l.convert_time_to_second(c[t])
-                                #print data[u'Indicatif'].encode('utf-8'), h[t], c[t], tx, bf, l.convert_second_to_time(bf)
+                                print data['Indicatif'], h[t], c[t], tx, bf, l.convert_second_to_time(bf)
                         if tx >= 10 and bf >= 360:
                             ban_timestamp = (now + datetime.timedelta(minutes = s.campeur_ban))
                             ban_clock = ban_timestamp.strftime('%H:%M:%S')
