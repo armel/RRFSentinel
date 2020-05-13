@@ -143,7 +143,7 @@ def main(argv):
                             if h[t] >= plage_start_campeur and h[t] < plage_stop:
                                 tx += 1
                                 bf += l.convert_time_to_second(c[t])
-                                print(data['Indicatif'], h[t], c[t], tx, bf, l.convert_second_to_time(bf))
+                                #print(data['Indicatif'], h[t], c[t], tx, bf, l.convert_second_to_time(bf))
                         if tx >= 10 and bf >= 360:
                             ban_timestamp = (now + datetime.timedelta(minutes = s.campeur_ban))
                             ban_clock = ban_timestamp.strftime('%H:%M:%S')
