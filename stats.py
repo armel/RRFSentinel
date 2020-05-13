@@ -128,40 +128,40 @@ def main(argv):
     print('--------------------')
     print(color.GREEN + '>>> Intempestifs <<<' + color.END)
 
-    for s in intempestif_stat:
+    for data in intempestif_stat:
         intempestif_total_link += 1
         is_ban = False
         print('--------------------')
 
-        for t in intempestif_horodatage[s[0]]:
+        for t in intempestif_horodatage[data[0]]:
             tmp = (now - datetime.timedelta(minutes = t[1])).strftime('%H:%M:%S')
             if t[0] > tmp:
                 is_ban = True
                 break
 
         if day == now.strftime('%Y-%m-%d') and is_ban is True:
-            print(color.RED + s[0] + ': Ban en cours !!!' + color.END)
+            print(color.RED + data[0] + ': Ban en cours !!!' + color.END)
         else:
-            print(color.GREEN + s[0] + ':' + color.END)
+            print(color.GREEN + data[0] + ':' + color.END)
 
         b = 1
-        for t in intempestif_horodatage[s[0]]:
+        for t in intempestif_horodatage[data[0]]:
             print('\t-> Ban %02d' % b, end=' ')
             print('à', t[0] + ' pour ' + str(t[1]) + ' minutes' + ' (' + t[2] + ')')
             b += 1
 
         print('Total\t=>', end=' ')
         
-        print('%02d' % s[1][0], end=' ')
-        if s[1][0] > 1:
+        print('%02d' % data[1][0], end=' ')
+        if data[1][0] > 1:
             print('bans, pour', end=' ')
         else:
             print('ban, pour', end=' ')
-        print(s[1][1], end=' ')
+        print(data[1][1], end=' ')
         print('minutes')
 
-        intempestif_total_ban += s[1][0]
-        intempestif_total_time += s[1][1]
+        intempestif_total_ban += data[1][0]
+        intempestif_total_time += data[1][1]
 
     print('--------------------')
     print(color.GREEN + 'Résumé de la journée:' + color.END)
@@ -179,40 +179,40 @@ def main(argv):
     print('--------------------')
     print(color.GREEN + '>>>   Campeurs   <<<' + color.END)
 
-    for s in campeur_stat:
+    for data in campeur_stat:
         campeur_total_link += 1
         is_ban = False
         print('--------------------')
 
-        for t in campeur_horodatage[s[0]]:
+        for t in campeur_horodatage[data[0]]:
             tmp = (now - datetime.timedelta(minutes = t[1])).strftime('%H:%M:%S')
             if t[0] > tmp:
                 is_ban = True
                 break
 
         if day == now.strftime('%Y-%m-%d') and is_ban is True:
-            print(color.RED + s[0] + ': Ban en cours !!!' + color.END)
+            print(color.RED + data[0] + ': Ban en cours !!!' + color.END)
         else:
-            print(color.GREEN + s[0] + ':' + color.END)
+            print(color.GREEN + data[0] + ':' + color.END)
 
         b = 1
-        for t in campeur_horodatage[s[0]]:
+        for t in campeur_horodatage[data[0]]:
             print('\t-> Ban %02d' % b, end=' ')
             print('à', t[0] + ' pour ' + str(t[1]) + ' minutes' + ' (' + t[2] + ')')
             b += 1
 
         print('Total\t=>', end=' ')
         
-        print('%02d' % s[1][0], end=' ')
-        if s[1][0] > 1:
+        print('%02d' % data[1][0], end=' ')
+        if data[1][0] > 1:
             print('bans, pour', end=' ')
         else:
             print('ban, pour', end=' ')
-        print(s[1][1], end=' ')
+        print(data[1][1], end=' ')
         print('minutes')
 
-        campeur_total_ban += s[1][0]
-        campeur_total_time += s[1][1]
+        campeur_total_ban += data[1][0]
+        campeur_total_time += data[1][1]
 
     print('--------------------')
     print(color.GREEN + 'Résumé de la journée:' + color.END)
