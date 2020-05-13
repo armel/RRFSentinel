@@ -106,6 +106,7 @@ def main(argv):
 
                 if ' - ' in line:
                     element = line.split(' - ')
+                    print (len(element), element)
                     if len(element) == 5:
                         if '<<' not in element[1]:
                             if 'udp --dport 5300' in element[5]:
