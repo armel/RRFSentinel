@@ -75,17 +75,20 @@ def main(argv):
         elif opt in ('--day'):
             day = arg
 
-    stat = dict()
-    horodatage = dict()
+    intempestif_stat = dict()
+    intempestif_horodatage = dict()
+    intempestif_total_link = 0
+    intempestif_total_ban = 0
+    intempestif_total_time = 0
+
+    campeur_stat = dict()
+    campeur_horodatage = dict()
+
 
     find = False
     hr = 0
 
     # compute stats
-
-    total_link = 0
-    total_ban = 0
-    total_time = 0
 
     log_path = '/root/F4HWN/RRFSentinel/RRFSentinel.log'
     pid_path = '/root/F4HWN/RRFSentinel/RRFSentinel.pid'
@@ -103,22 +106,30 @@ def main(argv):
 
                 if ' - ' in line:
                     element = line.split(' - ')
-                    print(element)
-                    if '<<' not in element[1]:
-                        if 'udp --dport 5300' in element[5]:
-                            stat = save_stat(stat, element[1], int(element[4]))
-                            horodatage = save_horodatage(horodatage, element[1], element[0], int(element[4]), element[5])
+                    if len(element) == 5:
+                        if '<<' not in element[1]:
+                            if 'udp --dport 5300' in element[5]:
+                                intempestif_stat = save_stat(intempestif_stat, element[1], int(element[4]))
+                                intempestif_horodatage = save_horodatage(intempestif_horodatage, element[1], element[0], int(element[4]), element[5])
+                    elif len(element) == 4:
+                        if '<<' not in element[1]:
+                            if 'udp --dport 5300' in element[4]:
+                                campeur_stat = save_stat(campeur_stat, element[1], int(element[3]))
+                                campeur_horodatage = save_horodatage(campeur_horodatage, element[1], element[0], int(element[3]), element[4])
 
+    # 
+    # Intempestif
+    #
 
-    stat = sorted(list(stat.items()), key=lambda x: x[1][1])
-    stat.reverse()
+    intempestif_stat = sorted(list(intempestif_stat.items()), key=lambda x: x[1][1])
+    intempestif_stat.reverse()
 
-    for s in stat:
-        total_link += 1
+    for s in intempestif_stat:
+        intempestif_total_link += 1
         is_ban = False
         print('--------------------')
 
-        for t in horodatage[s[0]]:
+        for t in intempestif_horodatage[s[0]]:
             tmp = (now - datetime.timedelta(minutes = t[1])).strftime('%H:%M:%S')
             if t[0] > tmp:
                 is_ban = True
@@ -130,7 +141,7 @@ def main(argv):
             print(color.GREEN + s[0] + ':' + color.END)
 
         b = 1
-        for t in horodatage[s[0]]:
+        for t in intempestif_horodatage[s[0]]:
             print('\t-> Ban %02d' % b, end=' ')
             print('à', t[0] + ' pour ' + str(t[1]) + ' minutes' + ' (' + t[2] + ')')
             b += 1
@@ -145,20 +156,69 @@ def main(argv):
         print(s[1][1], end=' ')
         print('minutes')
 
-        total_ban += s[1][0]
-        total_time += s[1][1]
+        intempestif_total_ban += s[1][0]
+        intempestif_total_time += s[1][1]
 
     print('--------------------')
     print(color.GREEN + 'Résumé de la journée:' + color.END)
-    print('\t-> Nombre de links bannis: ' + str(total_link))
-    print('\t-> Nombre de bannissement: ' + str(total_ban))
-    print('\t-> Durée total: ' + str(total_time) + ' minutes')
+    print('\t-> Nombre de links bannis: ' + str(intempestif_total_link))
+    print('\t-> Nombre de bannissement: ' + str(intempestif_total_ban))
+    print('\t-> Durée total: ' + str(intempestif_total_time) + ' minutes')
 
+    # 
+    # Campeur
+    #
+
+    campeur_stat = sorted(list(campeur_stat.items()), key=lambda x: x[1][1])
+    campeur_stat.reverse()
+
+    for s in campeur_stat:
+        campeur_total_link += 1
+        is_ban = False
+        print('--------------------')
+
+        for t in campeur_horodatage[s[0]]:
+            tmp = (now - datetime.timedelta(minutes = t[1])).strftime('%H:%M:%S')
+            if t[0] > tmp:
+                is_ban = True
+                break
+
+        if day == now.strftime('%Y-%m-%d') and is_ban is True:
+            print(color.RED + s[0] + ': Ban en cours !!!' + color.END)
+        else:
+            print(color.GREEN + s[0] + ':' + color.END)
+
+        b = 1
+        for t in campeur_horodatage[s[0]]:
+            print('\t-> Ban %02d' % b, end=' ')
+            print('à', t[0] + ' pour ' + str(t[1]) + ' minutes' + ' (' + t[2] + ')')
+            b += 1
+
+        print('Total\t=>', end=' ')
+        
+        print('%02d' % s[1][0], end=' ')
+        if s[1][0] > 1:
+            print('bans, pour', end=' ')
+        else:
+            print('ban, pour', end=' ')
+        print(s[1][1], end=' ')
+        print('minutes')
+
+        campeur_total_ban += s[1][0]
+        campeur_total_time += s[1][1]
+
+    print('--------------------')
+    print(color.GREEN + 'Résumé de la journée:' + color.END)
+    print('\t-> Nombre de links bannis: ' + str(campeur_total_link))
+    print('\t-> Nombre de bannissement: ' + str(campeur_total_ban))
+    print('\t-> Durée total: ' + str(campeur_total_time) + ' minutes')
+
+    #
+    # check pid
+    #
 
     print('--------------------')
     print(color.GREEN + 'Status:' + color.END)
-
-    # check pid
 
     f = open(pid_path)
     tmp = f.readlines()
