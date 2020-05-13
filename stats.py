@@ -106,7 +106,6 @@ def main(argv):
 
                 if ' - ' in line:
                     element = line.split(' - ')
-                    print (len(element), element)
                     if len(element) == 6:
                         if '<<' not in element[1]:
                             if 'udp --dport 5300' in element[5]:
@@ -124,6 +123,9 @@ def main(argv):
 
     intempestif_stat = sorted(list(intempestif_stat.items()), key=lambda x: x[1][1])
     intempestif_stat.reverse()
+
+    print('--------------------')
+    print(color.GREEN + 'Intempesifs' + color.END)
 
     for s in intempestif_stat:
         intempestif_total_link += 1
@@ -172,6 +174,9 @@ def main(argv):
 
     campeur_stat = sorted(list(campeur_stat.items()), key=lambda x: x[1][1])
     campeur_stat.reverse()
+
+    print('--------------------')
+    print(color.GREEN + 'Campeurs' + color.END)
 
     for s in campeur_stat:
         campeur_total_link += 1
