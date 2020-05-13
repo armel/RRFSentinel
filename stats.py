@@ -83,7 +83,9 @@ def main(argv):
 
     campeur_stat = dict()
     campeur_horodatage = dict()
-
+    campeur_total_link = 0
+    campeur_total_ban = 0
+    campeur_total_time = 0
 
     find = False
     hr = 0
