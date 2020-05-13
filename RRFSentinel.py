@@ -88,7 +88,7 @@ def main(argv):
                 tx = s.porteuse[p][0]
                 date = s.porteuse[p][1].split(', ')
 
-                print(indicatif, tx, date)
+                #print(indicatif, tx, date)
 
                 if indicatif not in s.white_list:
                     count = 0
@@ -105,7 +105,7 @@ def main(argv):
                         if s.ban_count[indicatif] <= s.intempestif_fair_use:
                             ban_time = s.intempestif_ban
                         else:
-                            if indicatif[-2:] == ' H':  # Si Hotspot
+                            if indicatif[-2:] == ' H' or indicatif[-2:] == ' S':  # Si Hotspot
                                 ban_time = int(tx) * (s.ban_count[indicatif] - s.intempestif_fair_use)
                             else:                       # Sinon...
                                 ban_time = int(tx) * 2
