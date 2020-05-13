@@ -43,6 +43,9 @@ campeur_fair_use = 1            # nombre de ban avant application de la règle s
 
 fair_use_time = '06:00' # heure de ban avant application de la règle strict
 
+log_path = '/root/F4HWN/RRFSentinel/RRFSentinel.log'
+pid_path = '/root/F4HWN/RRFSentinel/RRFSentinel.pid'
+
 salon_list = {
     'RRF': {
         'url': 'http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf.json',

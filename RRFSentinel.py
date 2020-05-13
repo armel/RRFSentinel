@@ -23,7 +23,7 @@ def main(argv):
     day = now.strftime('%Y-%m-%d')
 
     restart = False
-    with open('/root/F4HWN/RRFSentinel/RRFSentinel.log') as f:
+    with open(s.log_path) as f:
         for line in f:
             if day in line:
                 restart = True

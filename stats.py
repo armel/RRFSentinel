@@ -7,6 +7,8 @@ Learn more about RRF on https://f5nlg.wordpress.com
 73 & 88 de F4HWN Armel
 '''
 
+import settings as s
+
 import os
 import sys
 import getopt
@@ -92,10 +94,7 @@ def main(argv):
 
     # compute stats
 
-    log_path = '/root/F4HWN/RRFSentinel/RRFSentinel.log'
-    pid_path = '/root/F4HWN/RRFSentinel/RRFSentinel.pid'
-
-    with open(log_path) as f:
+    with open(s.log_path) as f:
         for line in f:
             if day in line:
                 find = True
@@ -127,9 +126,7 @@ def main(argv):
     intempestif_stat.reverse()
 
     print('--------------------')
-    print(color.GREEN + '>>>              <<<' + color.END)
     print(color.GREEN + '>>> Intempestifs <<<' + color.END)
-    print(color.GREEN + '>>>              <<<' + color.END)
 
     for s in intempestif_stat:
         intempestif_total_link += 1
@@ -180,9 +177,7 @@ def main(argv):
     campeur_stat.reverse()
 
     print('--------------------')
-    print(color.GREEN + '>>>              <<<' + color.END)
     print(color.GREEN + '>>>   Campeurs   <<<' + color.END)
-    print(color.GREEN + '>>>              <<<' + color.END)
 
     for s in campeur_stat:
         campeur_total_link += 1
@@ -232,7 +227,7 @@ def main(argv):
     print('--------------------')
     print(color.GREEN + 'Status:' + color.END)
 
-    f = open(pid_path)
+    f = open(s.pid_path)
     tmp = f.readlines()
     pid = int(tmp[0].strip())
 
