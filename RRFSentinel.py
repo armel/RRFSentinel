@@ -40,19 +40,20 @@ def main(argv):
 
     print('RRFSentinel version ' + s.version)
     print('Salon: ' + s.salon)
-    print('-----')
+    print('')
     print('Intempestif settings')
     print('Plage: ' + str(s.intempestif_plage) + ' minutes')
     print('Ban: ' + str(s.intempestif_ban) + ' minutes')
     print('Déclenchements: ' + str(s.intempestif_tx))
     print('Fair use: ' + str(s.intempestif_fair_use))
-    print('-----')
+    print('')
     print('Campeur settings')
     print('Plage: ' + str(s.campeur_plage) + ' minutes')
     print('Ban: ' + str(s.campeur_ban) + ' minutes')
     print('Passage en émission: ' + str(s.campeur_tx))
     print('Durée en émission: ' + str(s.campeur_bf))
     print('Fair use: ' + str(s.campeur_fair_use))
+    print('')
 
     # Boucle principale
     while(True):
