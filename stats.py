@@ -87,7 +87,7 @@ def main(argv):
     total_ban = 0
     total_time = 0
 
-    with open('/tmp/RRFSentinel.log') as f:
+    with open('/root/F4HWN/RRFSentinel/RRFSentinel.log') as f:
         for line in f:
             if day in line:
                 find = True
