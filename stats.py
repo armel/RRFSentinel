@@ -103,6 +103,7 @@ def main(argv):
 
                 if ' - ' in line:
                     element = line.split(' - ')
+                    print(element)
                     if '<<' not in element[1]:
                         if 'udp --dport 5300' in element[5]:
                             stat = save_stat(stat, element[1], int(element[4]))
