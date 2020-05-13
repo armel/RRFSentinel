@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 '''
@@ -48,14 +48,14 @@ def save_horodatage(horodatage, indicatif, ban_date, ban_time, ban_end):
 
 # Usage
 def usage():
-    print 'Usage: RRFTracker.py [options ...]'
-    print
-    print '--help               this help'
-    print
-    print 'Search settings:'
-    print '  --day              set search day YYYY-MM-DD (default=current day)'
-    print
-    print '88 & 73 from F4HWN Armel'
+    print('Usage: RRFTracker.py [options ...]')
+    print()
+    print('--help               this help')
+    print()
+    print('Search settings:')
+    print('  --day              set search day YYYY-MM-DD (default=current day)')
+    print()
+    print('88 & 73 from F4HWN Armel')
 
 def main(argv):
 
@@ -106,13 +106,13 @@ def main(argv):
                             horodatage = save_horodatage(horodatage, element[1], element[0], int(element[4]), element[5])
 
 
-    stat = sorted(stat.items(), key=lambda x: x[1][1])
+    stat = sorted(list(stat.items()), key=lambda x: x[1][1])
     stat.reverse()
 
     for s in stat:
         total_link += 1
         is_ban = False
-        print '--------------------'
+        print('--------------------')
 
         for t in horodatage[s[0]]:
             tmp = (now - datetime.timedelta(minutes = t[1])).strftime('%H:%M:%S')
@@ -121,38 +121,38 @@ def main(argv):
                 break
 
         if day == now.strftime('%Y-%m-%d') and is_ban is True:
-            print color.RED + s[0] + ': Ban en cours !!!' + color.END
+            print(color.RED + s[0] + ': Ban en cours !!!' + color.END)
         else:
-            print color.GREEN + s[0] + ':' + color.END
+            print(color.GREEN + s[0] + ':' + color.END)
 
         b = 1
         for t in horodatage[s[0]]:
-            print '\t-> Ban %02d' % b,
-            print 'à', t[0] + ' pour ' + str(t[1]) + ' minutes' + ' (' + t[2] + ')'
+            print('\t-> Ban %02d' % b, end=' ')
+            print('à', t[0] + ' pour ' + str(t[1]) + ' minutes' + ' (' + t[2] + ')')
             b += 1
 
-        print 'Total\t=>',
+        print('Total\t=>', end=' ')
         
-        print '%02d' % s[1][0],
+        print('%02d' % s[1][0], end=' ')
         if s[1][0] > 1:
-            print 'bans, pour',
+            print('bans, pour', end=' ')
         else:
-            print 'ban, pour',
-        print s[1][1],
-        print 'minutes'
+            print('ban, pour', end=' ')
+        print(s[1][1], end=' ')
+        print('minutes')
 
         total_ban += s[1][0]
         total_time += s[1][1]
 
-    print '--------------------'
-    print color.GREEN + 'Résumé de la journée:' + color.END
-    print '\t-> Nombre de links bannis: ' + str(total_link)
-    print '\t-> Nombre de bannissement: ' + str(total_ban)
-    print '\t-> Durée total: ' + str(total_time) + ' minutes'
+    print('--------------------')
+    print(color.GREEN + 'Résumé de la journée:' + color.END)
+    print('\t-> Nombre de links bannis: ' + str(total_link))
+    print('\t-> Nombre de bannissement: ' + str(total_ban))
+    print('\t-> Durée total: ' + str(total_time) + ' minutes')
 
 
-    print '--------------------'
-    print color.GREEN + 'Status:' + color.END
+    print('--------------------')
+    print(color.GREEN + 'Status:' + color.END)
 
     # check pid
 
@@ -161,10 +161,10 @@ def main(argv):
     pid = int(tmp[0].strip())
 
     if psutil.pid_exists(pid):
-        print color.GREEN + '\t-> Success - RRFSentinel with pid %d exists' % pid
+        print(color.GREEN + '\t-> Success - RRFSentinel with pid %d exists' % pid)
     else:
-        print color.RED + '\t-> Failure - RRFSentinel with pid %d does not exist' % pid
-    print color.END
+        print(color.RED + '\t-> Failure - RRFSentinel with pid %d does not exist' % pid)
+    print(color.END)
 
 if __name__ == '__main__':
     try:

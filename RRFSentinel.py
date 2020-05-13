@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 '''
@@ -30,29 +30,29 @@ def main(argv):
                 break
 
     if restart is False:
-        print '----------'
-        print now.strftime('%Y-%m-%d')
-        print '----------'
+        print('----------')
+        print(now.strftime('%Y-%m-%d'))
+        print('----------')
     else:
-        print '-----'
-        print 'Restart at ' + now.strftime('%H:%M:%S')
-        print '-----'
+        print('-----')
+        print('Restart at ' + now.strftime('%H:%M:%S'))
+        print('-----')
 
-    print 'RRFSentinel version ' + s.version
-    print 'Salon: ' + s.salon
-    print '-----'
-    print 'Intempestif settings'
-    print 'Plage: ' + str(s.intempestif_plage) + ' minutes'
-    print 'Ban: ' + str(s.intempestif_ban) + ' minutes'
-    print 'Déclenchements: ' + str(s.intempestif_tx)
-    print 'Fair use: ' + str(s.intempestif_fair_use)
-    print '-----'
-    print 'Campeur settings'
-    print 'Plage: ' + str(s.campeur_plage) + ' minutes'
-    print 'Ban: ' + str(s.campeur_ban) + ' minutes'
-    print 'Passage en émission: ' + str(s.campeur_tx)
-    print 'Durée en émission: ' + str(s.campeur_bf)
-    print 'Fair use: ' + str(s.campeur_fair_use)
+    print('RRFSentinel version ' + s.version)
+    print('Salon: ' + s.salon)
+    print('-----')
+    print('Intempestif settings')
+    print('Plage: ' + str(s.intempestif_plage) + ' minutes')
+    print('Ban: ' + str(s.intempestif_ban) + ' minutes')
+    print('Déclenchements: ' + str(s.intempestif_tx))
+    print('Fair use: ' + str(s.intempestif_fair_use))
+    print('-----')
+    print('Campeur settings')
+    print('Plage: ' + str(s.campeur_plage) + ' minutes')
+    print('Ban: ' + str(s.campeur_ban) + ' minutes')
+    print('Passage en émission: ' + str(s.campeur_tx))
+    print('Durée en émission: ' + str(s.campeur_bf))
+    print('Fair use: ' + str(s.campeur_fair_use))
 
     # Boucle principale
     while(True):
@@ -68,9 +68,9 @@ def main(argv):
         try:
             r = requests.get(s.salon_list[s.salon]['url'], verify=False, timeout=1)
         except requests.exceptions.ConnectionError as errc:
-            print ('Error Connecting:', errc)
+            print(('Error Connecting:', errc))
         except requests.exceptions.Timeout as errt:
-            print ('Timeout Error:', errt)
+            print(('Timeout Error:', errt))
 
         try:
             rrf_data = r.json()
@@ -81,7 +81,7 @@ def main(argv):
 
             if 'porteuse' in rrf_data:
                 for data in rrf_data['porteuse']:
-                    s.porteuse[data[u'Indicatif'].encode('utf-8')] = [data[u'TX'], data[u'Date']]
+                    s.porteuse[data['Indicatif'].encode('utf-8')] = [data['TX'], data['Date']]
 
             for p in s.porteuse:
                 indicatif = p.strip()
@@ -119,12 +119,12 @@ def main(argv):
                         # Ban UDP
                         cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif + ' (INTEMPESTIF)\''
                         #os.system(cmd)
-                        print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
+                        print(plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd)
 
                         # Ban TCP
                         cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif + ' (INTEMPESTIF)\''
                         #os.system(cmd)
-                        print plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd
+                        print(plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd)
 
             #
             # Gestion des campeurs
@@ -132,14 +132,14 @@ def main(argv):
 
             if 'all' in rrf_data:
                 for data in rrf_data['all']:
-                    indicatif = data[u'Indicatif'].encode('utf-8')
+                    indicatif = data['Indicatif'].encode('utf-8')
 
-                    if indicatif not in s.ban_list and l.convert_time_to_second(data[u'Durée']) >= s.campeur_bf:
+                    if indicatif not in s.ban_list and l.convert_time_to_second(data['Durée']) >= s.campeur_bf:
                         bf = 0
                         tx = 0
                         h = data['Heure'].split(', ')
                         c = data['Chrono'].split(', ')
-                        for t in xrange(len(h)):
+                        for t in range(len(h)):
                             if h[t] >= plage_start_campeur and h[t] < plage_stop:
                                 tx += 1
                                 bf += l.convert_time_to_second(c[t])
@@ -154,12 +154,12 @@ def main(argv):
                             # Ban UDP
                             cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif + ' (CAMPEUR)\''
                             #os.system(cmd)
-                            print plage_stop + ' - ' + indicatif + ' - [' + str(bf) + ' @ ' + str(tx) + '] - ' + str(s.campeur_ban) + ' - ' + ban_clock + ' >> ' + cmd
+                            print(plage_stop + ' - ' + indicatif + ' - [' + str(bf) + ' @ ' + str(tx) + '] - ' + str(s.campeur_ban) + ' - ' + ban_clock + ' >> ' + cmd)
 
                             # Ban TCP
                             cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif + ' (CAMPEUR)\''
                             #os.system(cmd)
-                            print plage_stop + ' - ' + indicatif + ' - [' + str(bf) + ' @ ' + str(tx) + '] - ' + str(s.campeur_ban) + ' - ' + ban_clock + ' >> ' + cmd
+                            print(plage_stop + ' - ' + indicatif + ' - [' + str(bf) + ' @ ' + str(tx) + '] - ' + str(s.campeur_ban) + ' - ' + ban_clock + ' >> ' + cmd)
 
                     else:
                         break
@@ -179,28 +179,28 @@ def main(argv):
                 # Unban current reflector IP
                 cmd = 'iptables -D INPUT -s ' + s.link_ip[b] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b + ' (' + unban_list[b][2] + ')\''
                 #os.system(cmd)
-                print plage_stop + ' - ' + b + ' << ' + cmd
+                print(plage_stop + ' - ' + b + ' << ' + cmd)
 
                 cmd = 'iptables -D INPUT -s ' + s.link_ip[b] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b + ' (' + unban_list[b][2] + ')\''
                 #os.system(cmd)
-                print plage_stop + ' - ' + b + ' << ' + cmd
+                print(plage_stop + ' - ' + b + ' << ' + cmd)
 
                 # Unban old reflextor IP (at ban time... by security)
                 cmd = 'iptables -D INPUT -s ' + unban_list[b][1] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b + ' (' + unban_list[b][2] + ')\''
                 #os.system(cmd)
-                print plage_stop + ' - ' + b + ' << ' + cmd
+                print(plage_stop + ' - ' + b + ' << ' + cmd)
 
                 cmd = 'iptables -D INPUT -s ' + unban_list[b][1] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b + ' (' + unban_list[b][2] + ')\''
                 #os.system(cmd)
-                print plage_stop + ' - ' + b + ' << ' + cmd
+                print(plage_stop + ' - ' + b + ' << ' + cmd)
 
                 del s.ban_list[b]
 
         # If midnight
         if now.strftime('%H:%M') == '00:00':
-            print '----------'
-            print now.strftime('%Y-%m-%d')
-            print '----------'
+            print('----------')
+            print(now.strftime('%Y-%m-%d'))
+            print('----------')
             # Waiting during RRFTracker init...
             s.porteuse.clear()
             time.sleep(60)

@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 '''
@@ -24,4 +24,4 @@ def convert_time_to_second(time):
     else:
         format = [60, 1]        
     
-    return sum([a * b for a, b in zip(format, map(int, time.split(':')))])
+    return sum([a * b for a, b in zip(format, list(map(int, time.split(':'))))])
