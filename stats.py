@@ -127,7 +127,9 @@ def main(argv):
     intempestif_stat.reverse()
 
     print('--------------------')
+    print(color.GREEN + '>>>              <<<' + color.END)
     print(color.GREEN + '>>> Intempestifs <<<' + color.END)
+    print(color.GREEN + '>>>              <<<' + color.END)
 
     for s in intempestif_stat:
         intempestif_total_link += 1
@@ -178,7 +180,9 @@ def main(argv):
     campeur_stat.reverse()
 
     print('--------------------')
+    print(color.GREEN + '>>>              <<<' + color.END)
     print(color.GREEN + '>>>   Campeurs   <<<' + color.END)
+    print(color.GREEN + '>>>              <<<' + color.END)
 
     for s in campeur_stat:
         campeur_total_link += 1
