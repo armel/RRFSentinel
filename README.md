@@ -39,7 +39,7 @@ Au délà, la durée de mise en quarantaine est calculée ainsi :
 
 ## Mise en oeuvre
 
-Il est possible de lancer et arréter la RRFSentinel de la facon suivante. Sur les serveur 1 et 3 :
+Il est possible de lancer et arréter la RRFSentinel de la facon suivante. Sur les serveur 1, 2 et 3 :
 
 ```
 /opt/RRFSentinel/RRFSentinel.sh start
