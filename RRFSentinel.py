@@ -187,11 +187,11 @@ def main(argv):
                 print(plage_stop + ' - ' + b + ' << ' + cmd)
 
                 # Unban old reflextor IP (at ban time... by security)
-                cmd = 'iptables -D INPUT -s ' + unban_list[b][1] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b + ' (' + unban_list[b][2] + ')\''
+                cmd = 'iptables -D INPUT -s ' + unban_list[b][1] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b + ' (' + unban_list[b][2] + ')\' > /dev/null 2>&1'
                 os.system(cmd)
                 print(plage_stop + ' - ' + b + ' << ' + cmd)
 
-                cmd = 'iptables -D INPUT -s ' + unban_list[b][1] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b + ' (' + unban_list[b][2] + ')\''
+                cmd = 'iptables -D INPUT -s ' + unban_list[b][1] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b + ' (' + unban_list[b][2] + ')\' > /dev/null 2>&1'
                 os.system(cmd)
                 print(plage_stop + ' - ' + b + ' << ' + cmd)
 
