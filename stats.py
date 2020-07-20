@@ -107,12 +107,12 @@ def main(argv):
 
                 if ' - ' in line:
                     element = line.split(' - ')
-                    if len(element) == 6:
+                    if len(element) == 8:
                         if '<<' not in element[1]:
                             if 'udp --dport 5300' in element[5]:
                                 intempestif_stat = save_stat(intempestif_stat, element[1], int(element[4]))
                                 intempestif_horodatage = save_horodatage(intempestif_horodatage, element[1], element[0], int(element[4]), element[5])
-                    elif len(element) == 5:
+                    elif len(element) == 7:
                         if '<<' not in element[1]:
                             if 'udp --dport 5300' in element[4]:
                                 campeur_stat = save_stat(campeur_stat, element[1], int(element[3]))
