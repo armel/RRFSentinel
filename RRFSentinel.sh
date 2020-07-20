@@ -1,8 +1,8 @@
 #!/bin/sh
 
 PATH_SCRIPT='/opt/RRFSentinel/RRFSentinel.py'
-PATH_LOG='/tmp'
-PATH_PID='/tmp'
+PATH_LOG='/root'
+PATH_PID='/root'
 
 case "$1" in
     start)
