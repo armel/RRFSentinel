@@ -94,7 +94,7 @@ def main(argv):
 
     # compute stats
 
-    with open(s.log_path) as f:
+    with open(s.path_log) as f:
         for line in f:
             if day in line:
                 find = True
@@ -227,7 +227,7 @@ def main(argv):
     print('--------------------')
     print(color.GREEN + 'Status:' + color.END)
 
-    f = open(s.pid_path)
+    f = open(s.path_pid)
     tmp = f.readlines()
     pid = int(tmp[0].strip())
 
