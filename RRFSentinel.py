@@ -121,12 +121,12 @@ def main(argv):
 
                         # Ban UDP
                         cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel - INTEMPESTIF - ' + indicatif + '\''
-                        os.system(cmd)
+                        #os.system(cmd)
                         print(plage_stop_long + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd)
 
                         # Ban TCP
                         cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel - INTEMPESTIF - ' + indicatif + '\''
-                        os.system(cmd)
+                        #os.system(cmd)
                         print(plage_stop_long + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd)
 
             #
@@ -156,12 +156,12 @@ def main(argv):
 
                             # Ban UDP
                             cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel - CAMPEUR - ' + indicatif + '\''
-                            os.system(cmd)
+                            #os.system(cmd)
                             print(plage_stop_long + ' - ' + indicatif + ' - [' + str(bf) + ' @ ' + str(tx) + '] - ' + str(s.campeur_ban) + ' - ' + ban_clock + ' >> ' + cmd)
 
                             # Ban TCP
                             cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel - CAMPEUR - ' + indicatif + '\''
-                            os.system(cmd)
+                            #os.system(cmd)
                             print(plage_stop_long + ' - ' + indicatif + ' - [' + str(bf) + ' @ ' + str(tx) + '] - ' + str(s.campeur_ban) + ' - ' + ban_clock + ' >> ' + cmd)
 
                     else:
@@ -181,20 +181,20 @@ def main(argv):
             for b in unban_list:
                 # Unban current reflector IP
                 cmd = 'iptables -D INPUT -s ' + s.link_ip[b] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel - ' + unban_list[b][2] + ' - ' + b + '\''
-                os.system(cmd)
+                #os.system(cmd)
                 print(plage_stop_long + ' - ' + b + ' << ' + cmd)
 
                 cmd = 'iptables -D INPUT -s ' + s.link_ip[b] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel - ' + unban_list[b][2] + ' - ' + b + '\''
-                os.system(cmd)
+                #os.system(cmd)
                 print(plage_stop_long + ' - ' + b + ' << ' + cmd)
 
                 # Unban old reflextor IP (at ban time... by security)
                 cmd = 'iptables -D INPUT -s ' + unban_list[b][1] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel - ' + unban_list[b][2] + ' - ' + b + '\' > /dev/null 2>&1'
-                os.system(cmd)
+                #os.system(cmd)
                 print(plage_stop_long + ' - ' + b + ' << ' + cmd)
 
                 cmd = 'iptables -D INPUT -s ' + unban_list[b][1] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel - ' + unban_list[b][2] + ' - ' + b + '\' > /dev/null 2>&1'
-                os.system(cmd)
+                #os.system(cmd)
                 print(plage_stop_long + ' - ' + b + ' << ' + cmd)
 
                 del s.ban_list[b]
