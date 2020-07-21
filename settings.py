@@ -43,8 +43,8 @@ campeur_fair_use = 1            # nombre de ban avant application de la règle s
 
 fair_use_time = '06:00' # heure de ban avant application de la règle strict
 
-path_log = '/root/RRFSentinel.log'
-path_pid = '/root/RRFSentinel.pid'
+path_log = '/tmp/RRFSentinel.log'
+path_pid = '/tmp/RRFSentinel.pid'
 
 salon_list = {
     'RRF': {
