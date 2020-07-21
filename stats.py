@@ -102,7 +102,7 @@ def main(argv):
                     if len(element) == 7:
                         tmp = element[3].split(' ')
                         intempestif_stat = save_stat(intempestif_stat, element[5], int(tmp[0]))
-                        intempestif_horodatage = save_horodatage(intempestif_horodatage, element[5], element[0][0:8], int(tmp[0]), element[6])
+                        intempestif_horodatage = save_horodatage(intempestif_horodatage, element[5], element[0][:8], int(tmp[0]), element[6])
                     elif len(element) == 6:
                         campeur_stat = save_stat(campeur_stat, element[1], int(element[3]))
                         campeur_horodatage = save_horodatage(campeur_horodatage, element[1], element[0], int(element[3]), element[4])
@@ -123,14 +123,12 @@ def main(argv):
         print('--------------------')
 
         for t in intempestif_horodatage[data[0]]:
-            print(t)
             tmp = (now - datetime.timedelta(minutes = t[1])).strftime('%H:%M:%S')
-            print(tmp)
             if t[0] > tmp:
                 is_ban = True
                 break
 
-        if day == now.strftime('%Y-%m-%d') and is_ban is True:
+        if day == now.strftime('%d-%m-%Y') and is_ban is True:
             print(color.RED + data[0] + ': Ban en cours !!!' + color.END)
         else:
             print(color.GREEN + data[0] + ':' + color.END)
@@ -181,7 +179,7 @@ def main(argv):
                 is_ban = True
                 break
 
-        if day == now.strftime('%Y-%m-%d') and is_ban is True:
+        if day == now.strftime('%d-%m-%Y') and is_ban is True:
             print(color.RED + data[0] + ': Ban en cours !!!' + color.END)
         else:
             print(color.GREEN + data[0] + ':' + color.END)
