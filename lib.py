@@ -25,3 +25,46 @@ def convert_time_to_second(time):
         format = [60, 1]        
     
     return sum([a * b for a, b in zip(format, list(map(int, time.split(':'))))])
+
+# Add iptable
+def add_iptable(ip, port, indicatif, type, ban_clock, ban_comment):
+    with open(s.path_log, 'a+') as f:
+        # udp
+        cmd = 'sudo iptables -I INPUT -s ' + ip + ' -p udp --dport ' + str(port) + ' -j REJECT -m comment --comment \'RRFSentinel - ' + type + ' - ' + indicatif + ' - ' + ban_clock + '\''
+        try:
+            pass
+            #os.system(cmd)
+        except:
+            pass
+        f.write(datetime.datetime.now().strftime('%H:%M:%S %d-%m-%Y') + ban_comment + ' >> ' + cmd + '\n')
+
+        # tcp
+        cmd = 'sudo iptables -I INPUT -s ' + ip + ' -p tcp --dport ' + str(port) + ' -j REJECT -m comment --comment \'RRFSentinel - ' + type + ' - ' + indicatif + ' - ' + ban_clock + '\''
+        try:
+            pass
+            #os.system(cmd)
+        except:
+            pass
+        f.write(datetime.datetime.now().strftime('%H:%M:%S %d-%m-%Y') + ban_comment + ' >> ' + cmd + '\n')
+    return True
+
+# Del iptable
+def del_iptable(ip, port, indicatif, type, ban_clock):
+    with open(s.path_log, 'a') as f:
+        # udp
+        cmd = 'sudo iptables -D INPUT -s ' + ip + ' -p udp --dport ' + str(port) + ' -j REJECT -m comment --comment \'RRFSentinel - ' + type + ' - ' + indicatif  + ' - ' + ban_clock + '\''
+        try:
+            pass
+            #os.system(cmd)
+        except:
+            pass        
+        f.write(datetime.datetime.now().strftime('%H:%M:%S %d-%m-%Y') + ' << ' + cmd + '\n')
+        # tcp
+        cmd = 'sudo iptables -D INPUT -s ' + ip + ' -p tcp --dport ' + str(port) + ' -j REJECT -m comment --comment \'RRFSentinel - ' + type + ' - ' + indicatif  + ' - ' + ban_clock + '\''
+        try:
+            pass
+            #os.system(cmd)
+        except:
+            pass
+        f.write(datetime.datetime.now().strftime('%H:%M:%S %d-%m-%Y') + ' << ' + cmd + '\n')
+    return True
