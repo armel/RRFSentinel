@@ -152,7 +152,7 @@ def main(argv):
 
         for b in s.ban_list:
             if time.mktime(now.timetuple()) > s.ban_list[b][0]:
-                unban_list[b] = (s.ban_list[b][0], s.ban_list[b][1], s.ban_list[b][2])
+                unban_list[b] = (s.ban_list[b][0], s.ban_list[b][1], s.ban_list[b][2], s.ban_list[b][3])
 
         if unban_list:
             for b in unban_list:
