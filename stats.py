@@ -101,8 +101,8 @@ def main(argv):
                     element = line.split(' - ')
                     print(element)
                     if len(element) == 7:
-                        intempestif_stat = save_stat(intempestif_stat, element[5], int(element[2]))
                         tmp = element[3].split(' ')
+                        intempestif_stat = save_stat(intempestif_stat, element[5], int(tmp[0]))
                         intempestif_horodatage = save_horodatage(intempestif_horodatage, element[5], element[0][0:8], int(tmp[0]), element[6])
                     elif len(element) == 6:
                         campeur_stat = save_stat(campeur_stat, element[1], int(element[3]))
