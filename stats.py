@@ -99,6 +99,7 @@ def main(argv):
             if day in line:
                 if '>> sudo' in line:
                     element = line.split(' - ')
+                    print(element)
                     if len(element) == 7:
                         intempestif_stat = save_stat(intempestif_stat, element[5], int(element[2]))
                         intempestif_horodatage = save_horodatage(intempestif_horodatage, element[5], element[0][0:8], int(element[2]), element[6])
