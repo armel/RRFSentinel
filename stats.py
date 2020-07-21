@@ -97,7 +97,7 @@ def main(argv):
     with open(s.path_log) as f:
         for line in f:
             if day in line:
-                if '>> sudo' in line:
+                if ('>> sudo' and '-p udp') in line:
                     element = line.split(' - ')
                     print(element)
                     if len(element) == 7:
