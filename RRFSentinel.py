@@ -16,44 +16,11 @@ import os
 import time
 import sys
 import getopt
+import json
 
 def main(argv):
 
     now = datetime.datetime.now()
-    day = now.strftime('%Y-%m-%d')
-
-    restart = False
-    with open(s.log_path) as f:
-        for line in f:
-            if day in line:
-                restart = True
-                break
-
-    if restart is False:
-        print('----------')
-        print(now.strftime('%Y-%m-%d'))
-        print('----------')
-    else:
-        print('-----')
-        print('Restart at ' + now.strftime('%H:%M:%S'))
-        print('-----')
-
-    print('RRFSentinel version ' + s.version)
-    print('Salon: ' + s.salon)
-    print('')
-    print('Intempestif settings')
-    print('Plage: ' + str(s.intempestif_plage) + ' minutes')
-    print('Ban: ' + str(s.intempestif_ban) + ' minutes')
-    print('Déclenchements: ' + str(s.intempestif_tx))
-    print('Fair use: ' + str(s.intempestif_fair_use))
-    print('')
-    print('Campeur settings')
-    print('Plage: ' + str(s.campeur_plage) + ' minutes')
-    print('Ban: ' + str(s.campeur_ban) + ' minutes')
-    print('Passage en émission: ' + str(s.campeur_tx))
-    print('Durée en émission: ' + str(s.campeur_bf))
-    print('Fair use: ' + str(s.campeur_fair_use))
-    print('')
 
     # Boucle principale
     while(True):
@@ -115,18 +82,11 @@ def main(argv):
                         ban_clock = ban_timestamp.strftime('%H:%M:%S')
                         ban_timestamp = time.mktime(ban_timestamp.timetuple())
 
-                        s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'INTEMPESTIF')
-
-                        # Ban UDP
-                        cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif + ' (INTEMPESTIF)\''
-                        os.system(cmd)
-                        print(plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd)
-
-                        # Ban TCP
-                        cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif + ' (INTEMPESTIF)\''
-                        os.system(cmd)
-                        print(plage_stop + ' - ' + indicatif + ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time) + ' - ' + ban_clock + ' >> ' + cmd)
-
+                        s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'INTEMPESTIF', ban_clock)
+                
+                        ban_comment = ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time)
+                        l.add_iptable(s.link_ip[indicatif], '5300', indicatif, 'INTEMPESTIF', ban_clock, ban_comment)
+    
             #
             # Gestion des campeurs
             #
@@ -150,17 +110,10 @@ def main(argv):
                             ban_clock = ban_timestamp.strftime('%H:%M:%S')
                             ban_timestamp = time.mktime(ban_timestamp.timetuple())
 
-                            s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'CAMPEUR')
+                            s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'CAMPEUR', ban_clock)
 
-                            # Ban UDP
-                            cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif + ' (CAMPEUR)\''
-                            os.system(cmd)
-                            print(plage_stop + ' - ' + indicatif + ' - [' + str(bf) + ' @ ' + str(tx) + '] - ' + str(s.campeur_ban) + ' - ' + ban_clock + ' >> ' + cmd)
-
-                            # Ban TCP
-                            cmd = 'iptables -I INPUT -s ' + s.link_ip[indicatif] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + indicatif + ' (CAMPEUR)\''
-                            os.system(cmd)
-                            print(plage_stop + ' - ' + indicatif + ' - [' + str(bf) + ' @ ' + str(tx) + '] - ' + str(s.campeur_ban) + ' - ' + ban_clock + ' >> ' + cmd)
+                            ban_comment = ' - [' + str(bf) + ' @ ' + str(tx) + '] - ' + str(s.campeur_ban)
+                            l.add_iptable(s.link_ip[indicatif], '5300', indicatif, 'CAMPEUR', ban_clock, ban_comment)
 
                     else:
                         break
@@ -173,35 +126,20 @@ def main(argv):
 
         for b in s.ban_list:
             if time.mktime(now.timetuple()) > s.ban_list[b][0]:
-                unban_list[b] = (s.ban_list[b][0], s.ban_list[b][1], s.ban_list[b][2])
+                unban_list[b] = (s.ban_list[b][0], s.ban_list[b][1], s.ban_list[b][2], s.ban_list[b][3])
 
         if unban_list:
             for b in unban_list:
                 # Unban current reflector IP
-                cmd = 'iptables -D INPUT -s ' + s.link_ip[b] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b + ' (' + unban_list[b][2] + ')\''
-                os.system(cmd)
-                print(plage_stop + ' - ' + b + ' << ' + cmd)
-
-                cmd = 'iptables -D INPUT -s ' + s.link_ip[b] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b + ' (' + unban_list[b][2] + ')\''
-                os.system(cmd)
-                print(plage_stop + ' - ' + b + ' << ' + cmd)
+                l.del_iptable(s.link_ip[b], '5300', b, unban_list[b][2], unban_list[b][3])
 
                 # Unban old reflextor IP (at ban time... by security)
-                cmd = 'iptables -D INPUT -s ' + unban_list[b][1] + ' -p udp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b + ' (' + unban_list[b][2] + ')\' > /dev/null 2>&1'
-                os.system(cmd)
-                print(plage_stop + ' - ' + b + ' << ' + cmd)
-
-                cmd = 'iptables -D INPUT -s ' + unban_list[b][1] + ' -p tcp --dport 5300 -j REJECT -m comment --comment \'RRFSentinel ' + b + ' (' + unban_list[b][2] + ')\' > /dev/null 2>&1'
-                os.system(cmd)
-                print(plage_stop + ' - ' + b + ' << ' + cmd)
+                l.del_iptable(unban_list[b][1], '5300', b, unban_list[b][2], unban_list[b][3])
 
                 del s.ban_list[b]
 
         # If midnight
         if now.strftime('%H:%M') == '00:00':
-            print('----------')
-            print(now.strftime('%Y-%m-%d'))
-            print('----------')
             # Waiting during RRFTracker init...
             s.porteuse.clear()
             time.sleep(60)
