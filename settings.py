@@ -24,7 +24,7 @@ On ban pour 15 minutes
 
 # Version
 
-version = '2.1.0'
+version = '2.2.0'
 
 # Variables par defaut
 

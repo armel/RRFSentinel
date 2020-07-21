@@ -37,8 +37,7 @@ def add_iptable(ip, port, indicatif, type, ban_clock, ban_comment):
         # udp
         cmd = 'sudo iptables -I INPUT -s ' + ip + ' -p udp --dport ' + str(port) + ' -j REJECT -m comment --comment \'RRFSentinel - ' + type + ' - ' + indicatif + ' - ' + ban_clock + '\''
         try:
-            pass
-            #os.system(cmd)
+            os.system(cmd)
         except:
             pass
         f.write(datetime.datetime.now().strftime('%H:%M:%S %d-%m-%Y') + ban_comment + ' >> ' + cmd + '\n')
@@ -46,8 +45,7 @@ def add_iptable(ip, port, indicatif, type, ban_clock, ban_comment):
         # tcp
         cmd = 'sudo iptables -I INPUT -s ' + ip + ' -p tcp --dport ' + str(port) + ' -j REJECT -m comment --comment \'RRFSentinel - ' + type + ' - ' + indicatif + ' - ' + ban_clock + '\''
         try:
-            pass
-            #os.system(cmd)
+            os.system(cmd)
         except:
             pass
         f.write(datetime.datetime.now().strftime('%H:%M:%S %d-%m-%Y') + ban_comment + ' >> ' + cmd + '\n')
@@ -59,16 +57,14 @@ def del_iptable(ip, port, indicatif, type, ban_clock):
         # udp
         cmd = 'sudo iptables -D INPUT -s ' + ip + ' -p udp --dport ' + str(port) + ' -j REJECT -m comment --comment \'RRFSentinel - ' + type + ' - ' + indicatif  + ' - ' + ban_clock + '\''
         try:
-            pass
-            #os.system(cmd)
+            os.system(cmd)
         except:
             pass        
         f.write(datetime.datetime.now().strftime('%H:%M:%S %d-%m-%Y') + ' << ' + cmd + '\n')
         # tcp
         cmd = 'sudo iptables -D INPUT -s ' + ip + ' -p tcp --dport ' + str(port) + ' -j REJECT -m comment --comment \'RRFSentinel - ' + type + ' - ' + indicatif  + ' - ' + ban_clock + '\''
         try:
-            pass
-            #os.system(cmd)
+            os.system(cmd)
         except:
             pass
         f.write(datetime.datetime.now().strftime('%H:%M:%S %d-%m-%Y') + ' << ' + cmd + '\n')
