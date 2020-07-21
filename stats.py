@@ -100,6 +100,7 @@ def main(argv):
             if day in line:
                 if ' - ' in line:
                     element = line.split(' - ')
+                    print(element)
                     if len(element) == 8:
                         if '<<' not in element[1]:
                             if 'udp --dport 5300' in element[5]:
