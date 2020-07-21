@@ -9,6 +9,11 @@ Learn more about RRF on https://f5nlg.wordpress.com
 
 import settings as s
 
+import datetime
+import time
+import os
+import sys
+
 # lecture du svxreflector.log
 def read_log():
     with open('/tmp/svxreflector.log') as f:
