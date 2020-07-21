@@ -123,7 +123,9 @@ def main(argv):
         print('--------------------')
 
         for t in intempestif_horodatage[data[0]]:
+            print t
             tmp = (now - datetime.timedelta(minutes = t[1])).strftime('%H:%M:%S')
+            print tmp
             if t[0] > tmp:
                 is_ban = True
                 break
