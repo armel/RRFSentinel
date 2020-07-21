@@ -62,7 +62,7 @@ def usage():
 def main(argv):
 
     now = datetime.datetime.now()
-    day = now.strftime('%Y-%m-%d')
+    day = now.strftime('%d-%m-%Y')
 
     # Check and get arguments
     try:
@@ -97,14 +97,6 @@ def main(argv):
     with open(s.path_log) as f:
         for line in f:
             if day in line:
-                find = True
-
-            if find is True:
-                if '----------' in line:
-                    hr += 1
-                    if hr == 2:
-                        break
-
                 if ' - ' in line:
                     element = line.split(' - ')
                     if len(element) == 8:
