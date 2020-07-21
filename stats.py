@@ -96,6 +96,7 @@ def main(argv):
 
     with open(s.path_log) as f:
         for line in f:
+            print(day, line)
             if day in line:
                 if ' - ' in line:
                     element = line.split(' - ')
