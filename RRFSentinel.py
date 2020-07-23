@@ -139,12 +139,12 @@ def main(argv):
                 del s.ban_list[b]
 
         # Write json for RRFBlockIP
-        
+
         rrf_json = []
         for b in s.ban_list:
             rrf_json.append({
                 'Indicatif': b.decode(),
-                'Until': tmp[3][:8].decode()
+                'Until': unban_list[b][3].decode()
             })    
 
         with open(s.path_json, 'w') as f:
