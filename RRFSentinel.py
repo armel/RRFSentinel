@@ -143,8 +143,8 @@ def main(argv):
         rrf_json = []
         for b in s.ban_list:
             rrf_json.append({
-                'Indicatif': b.decode(),
-                'Until': unban_list[b][3].decode()
+                'Indicatif': b,
+                'Until': s.ban_list[b][3]
             })    
 
         with open(s.path_json, 'w') as f:
