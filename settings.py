@@ -45,6 +45,7 @@ fair_use_time = '06:00' # heure de ban avant application de la règle strict
 
 path_log = '/tmp/RRFSentinel.log'
 path_pid = '/tmp/RRFSentinel.pid'
+path_json = '/var/www/RRFBlockIP/data/RRFSentinel.json'
 
 salon_list = {
     'RRF': {

@@ -138,6 +138,18 @@ def main(argv):
 
                 del s.ban_list[b]
 
+            # Write json for RRFBlockIP
+            
+            rrf_json = []
+            for b in s.ban_list:
+                rrf_json.append({
+                    'Indicatif': b.decode(),
+                    'Until': tmp[3][:8].decode()
+                })    
+
+            with open(s.path_json, 'w') as f:
+                json.dump(rrf_json, f)
+
         # If midnight
         if now.strftime('%H:%M') == '00:00':
             # Waiting during RRFTracker init...
