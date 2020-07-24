@@ -82,7 +82,7 @@ def main(argv):
                         ban_clock = ban_timestamp.strftime('%H:%M:%S')
                         ban_timestamp = time.mktime(ban_timestamp.timetuple())
 
-                        s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'INTEMPESTIF', ban_clock, plage_stop, str(s.ban_count[indicatif]))
+                        s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'INTEMPESTIF', ban_clock, plage_stop, str(ban_time) + 'm')
                 
                         ban_comment = ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time)
                         l.add_iptable(s.link_ip[indicatif], '5300', indicatif, 'INTEMPESTIF', ban_clock, ban_comment)
@@ -110,7 +110,7 @@ def main(argv):
                             ban_clock = ban_timestamp.strftime('%H:%M:%S')
                             ban_timestamp = time.mktime(ban_timestamp.timetuple())
 
-                            s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'CAMPEUR', ban_clock, plage_stop, str(s.ban_count[indicatif]))
+                            s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'CAMPEUR', ban_clock, plage_stop, str(ban_time) + 'm')
 
                             ban_comment = ' - [' + str(bf) + ' @ ' + str(tx) + '] - ' + str(s.campeur_ban)
                             l.add_iptable(s.link_ip[indicatif], '5300', indicatif, 'CAMPEUR', ban_clock, ban_comment)
