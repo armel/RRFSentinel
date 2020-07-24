@@ -82,7 +82,7 @@ def main(argv):
                         ban_clock = ban_timestamp.strftime('%H:%M:%S')
                         ban_timestamp = time.mktime(ban_timestamp.timetuple())
 
-                        s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'INTEMPESTIF', ban_clock)
+                        s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'INTEMPESTIF', ban_clock, plage_stop, str(s.ban_count[indicatif]))
                 
                         ban_comment = ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time)
                         l.add_iptable(s.link_ip[indicatif], '5300', indicatif, 'INTEMPESTIF', ban_clock, ban_comment)
@@ -110,7 +110,7 @@ def main(argv):
                             ban_clock = ban_timestamp.strftime('%H:%M:%S')
                             ban_timestamp = time.mktime(ban_timestamp.timetuple())
 
-                            s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'CAMPEUR', ban_clock)
+                            s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'CAMPEUR', ban_clock, plage_stop, str(s.ban_count[indicatif]))
 
                             ban_comment = ' - [' + str(bf) + ' @ ' + str(tx) + '] - ' + str(s.campeur_ban)
                             l.add_iptable(s.link_ip[indicatif], '5300', indicatif, 'CAMPEUR', ban_clock, ban_comment)
@@ -144,7 +144,9 @@ def main(argv):
         for b in s.ban_list:
             rrf_json.append({
                 'Indicatif': b,
-                'Until': s.ban_list[b][3]
+                'Début': s.ban_list[b][4],
+                'Durée': s.ban_list[b][5],
+                'Fin': s.ban_list[b][3]
             })    
 
         with open(s.path_json, 'w') as f:
