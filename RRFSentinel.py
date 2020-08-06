@@ -102,6 +102,7 @@ def main(argv):
                         h = data['Heure'].split(', ')
                         c = data['Chrono'].split(', ')
                         for t in range(len(h)):
+                            print(len(h))
                             print(t, h, h[t], plage_start_campeur, plage_stop)
                             if h[t] >= plage_start_campeur and h[t] < plage_stop:
                                 tx += 1
