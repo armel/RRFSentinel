@@ -96,7 +96,7 @@ def main(argv):
             if 'all' in rrf_data:
                 for data in rrf_data['all']:
                     indicatif = data['Indicatif']
-
+                    print('ici')
                     if indicatif not in s.ban_list and l.convert_time_to_second(data['Durée']) >= s.campeur_bf:
                         bf = 0
                         tx = 0
