@@ -23,6 +23,8 @@ def main(argv):
     now = datetime.datetime.now()
     l.hostname_init()
 
+    print(s.serveur)
+
     # Boucle principale
     while(True):
         now = datetime.datetime.now()
