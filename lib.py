@@ -34,7 +34,7 @@ def read_log():
 
     # Requete HTTP vers le flux json de l'API fournie par F1EVM
     try:
-        r = requests.get(s.nodes_json, verify=False, timeout=2)
+        r = requests.get(s.nodes_json, verify=False, timeout=1)
     except:
         pass
 
@@ -49,6 +49,7 @@ def read_log():
         for node in nodes['nodes']:
             if node[0] == s.serveur:
                 s.link_ip[node[2].strip()] = node[3]
+    '''
     # Sinon, on utilise la methode traditionnelle en lisant le log de svxreflector
     else:
         with open(s.nodes_file) as f:
@@ -56,6 +57,7 @@ def read_log():
                 if 'Login' in line:
                     element = line.split(':')
                     s.link_ip[element[3].strip()] = element[4][15:]
+    '''
 
 # Convert time to second
 def convert_time_to_second(time):
