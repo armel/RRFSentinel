@@ -21,6 +21,7 @@ import json
 def main(argv):
 
     now = datetime.datetime.now()
+    l.hostname_init()
 
     # Boucle principale
     while(True):
@@ -78,14 +79,15 @@ def main(argv):
                             else:                       # Sinon...
                                 ban_time = int(tx) * 2
 
+                        ban_start = plage_stop
                         ban_timestamp = (now + datetime.timedelta(minutes = ban_time))
-                        ban_clock = ban_timestamp.strftime('%H:%M:%S')
+                        ban_stop = ban_timestamp.strftime('%H:%M:%S')
                         ban_timestamp = time.mktime(ban_timestamp.timetuple())
 
-                        s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'INTEMPESTIF', ban_clock, plage_stop, str(ban_time) + 'm')
+                        s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'INTEMPESTIF', ban_stop, ban_start, str(ban_time) + 'm')
                 
                         ban_comment = ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time)
-                        l.add_iptable(s.link_ip[indicatif], '5300', indicatif, 'INTEMPESTIF', ban_clock, ban_comment)
+                        l.add_iptable(s.link_ip[indicatif], '5300', indicatif, 'INTEMPESTIF', ban_stop, ban_comment)
     
             #
             # Gestion des campeurs
@@ -106,14 +108,15 @@ def main(argv):
                                 bf += l.convert_time_to_second(c[t])
                                 #print(data['Indicatif'], h[t], c[t], tx, bf, l.convert_second_to_time(bf))
                         if tx >= s.campeur_tx and bf >= s.campeur_bf:
+                            ban_start = plage_stop
                             ban_timestamp = (now + datetime.timedelta(minutes = s.campeur_ban))
-                            ban_clock = ban_timestamp.strftime('%H:%M:%S')
+                            ban_stop = ban_timestamp.strftime('%H:%M:%S')
                             ban_timestamp = time.mktime(ban_timestamp.timetuple())
 
-                            s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'CAMPEUR', ban_clock, plage_stop, str(ban_time) + 'm')
+                            s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'CAMPEUR', ban_stop, ban_start, str(ban_time) + 'm')
 
                             ban_comment = ' - [' + str(bf) + ' @ ' + str(tx) + '] - ' + str(s.campeur_ban)
-                            l.add_iptable(s.link_ip[indicatif], '5300', indicatif, 'CAMPEUR', ban_clock, ban_comment)
+                            l.add_iptable(s.link_ip[indicatif], '5300', indicatif, 'CAMPEUR', ban_stop, ban_comment)
 
                     else:
                         break

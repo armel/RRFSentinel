@@ -24,7 +24,7 @@ On ban pour 15 minutes
 
 # Version
 
-version = '2.2.0'
+version = '2.3.0'
 
 # Variables par defaut
 
@@ -59,6 +59,11 @@ white_list = ['F5ZIN-L', 'R.R.F', 'R.R.F_V2', 'RRF', 'RRF3']
 ban_list = {}
 ban_count = {}
 
+nodes_json = 'http://rrf.f5nlg.ovh:4440/nodes'
+nodes_file = '/tmp/svxreflector.log'
+
 # Variables globales
 
 link_ip = dict()
+serveur = 0
+
