@@ -99,12 +99,12 @@ def main(argv):
             if day in line:
                 if ('>> sudo' and '-p udp') in line:
                     element = line.split(' - ')
-                    print (len(element))
                     if len(element) == 7:
                         tmp = element[3].split(' ')
                         intempestif_stat = save_stat(intempestif_stat, element[5], int(tmp[0]))
                         intempestif_horodatage = save_horodatage(intempestif_horodatage, element[5], element[0][:8], int(tmp[0]), element[6])
                     elif len(element) == 6:
+                        print(element)
                         campeur_stat = save_stat(campeur_stat, element[1], int(element[3]))
                         campeur_horodatage = save_horodatage(campeur_horodatage, element[1], element[0], int(element[3]), element[4])
 
