@@ -107,12 +107,12 @@ def main(argv):
                                 bf += l.convert_time_to_second(c[t])
                                 #print(data['Indicatif'], h[t], c[t], tx, bf)
                         if tx >= s.campeur_tx and bf >= s.campeur_bf:
-                            print('ici')
                             ban_start = plage_stop
                             ban_timestamp = (now + datetime.timedelta(minutes = s.campeur_ban))
                             ban_stop = ban_timestamp.strftime('%H:%M:%S')
                             ban_timestamp = time.mktime(ban_timestamp.timetuple())
 
+                            print('la')
                             s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'CAMPEUR', ban_stop, ban_start, str(ban_time) + 'm')
 
                             ban_comment = ' - [' + str(bf) + ' @ ' + str(tx) + '] - ' + str(s.campeur_ban)
