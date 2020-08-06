@@ -99,6 +99,7 @@ def main(argv):
             if day in line:
                 if ('>> sudo' and '-p udp') in line:
                     element = line.split(' - ')
+                    print (len(element))
                     if len(element) == 7:
                         tmp = element[3].split(' ')
                         intempestif_stat = save_stat(intempestif_stat, element[5], int(tmp[0]))
