@@ -19,6 +19,7 @@ import socket
 # Detection du serveur
 def hostname_init():
     hostname = socket.getfqdn()
+    print(hostname)
     if hostname == 'rrf.f5nlg.ovh':
         s.serveur = 1
     elif hostname == 'rrf2.f5nlg.ovh':
