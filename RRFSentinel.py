@@ -96,12 +96,12 @@ def main(argv):
             if 'all' in rrf_data:
                 for data in rrf_data['all']:
                     indicatif = data['Indicatif']
-                    print('ici')
                     if indicatif not in s.ban_list and l.convert_time_to_second(data['Durée']) >= s.campeur_bf:
                         bf = 0
                         tx = 0
                         h = data['Heure'].split(', ')
                         c = data['Chrono'].split(', ')
+                        print('la')
                         for t in range(len(h)):
                             if h[t] >= plage_start_campeur and h[t] < plage_stop:
                                 tx += 1
