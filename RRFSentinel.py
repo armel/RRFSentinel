@@ -115,7 +115,7 @@ def main(argv):
 
                             s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'CAMPEUR', ban_stop, ban_start, str(ban_time) + 'm')
 
-                            ban_comment = ' - [' + str(bf) + ' @ ' + str(tx) + '] - ' + str(s.ban_time)
+                            ban_comment = ' - [' + str(bf) + ' @ ' + str(tx) + '] - ' + str(ban_time)
                             l.add_iptable(s.link_ip[indicatif], '5300', indicatif, 'CAMPEUR', ban_stop, ban_comment)
 
                     else:
