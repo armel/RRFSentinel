@@ -36,9 +36,9 @@ intempestif_tx = 4              # nombre max de déclenchements suspects
 intempestif_fair_use = 3        # nombre de ban avant application de la règle strict
 
 campeur_plage = 60              # durée de la plage de déclenchements en minutes
-campeur_ban = 2                 # durée de la quarantaine en minutes
-campeur_tx = 3                  # nombre max de passage en émission
-campeur_bf = 30                 # nombre max de seconde en émission
+campeur_ban = 15                # durée de la quarantaine en minutes
+campeur_tx = 30                 # nombre max de passage en émission
+campeur_bf = 1800               # nombre max de seconde en émission
 
 fair_use_time = '06:00' # heure de ban avant application de la règle strict
 
