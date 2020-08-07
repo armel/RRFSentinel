@@ -45,7 +45,8 @@ def read_log():
         pass
 
     # Si le flux json est valide
-    if nodes != '': 
+    if nodes != '':
+        s.link_ip.clear()
         for node in nodes['nodes']:
             if node[0] == s.serveur:
                 s.link_ip[node[2].strip()] = node[3]
