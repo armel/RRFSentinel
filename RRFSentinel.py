@@ -144,6 +144,7 @@ def main(argv):
                     del s.ban_list[b]
                 else:
                     print('Echec')
+                    print(s.link_ip)
 
         # Write json for RRFBlockIP
 
