@@ -134,7 +134,7 @@ def main(argv):
         if unban_list:
             for b in unban_list:
                 # Unban current reflector IP
-                l.del_iptable(s.link_ip[b], '5300', b, unban_list[b][2], unban_list[b][3])
+                # l.del_iptable(s.link_ip[b], '5300', b, unban_list[b][2], unban_list[b][3])
 
                 # Unban old reflextor IP (at ban time... by security)
                 l.del_iptable(unban_list[b][1], '5300', b, unban_list[b][2], unban_list[b][3])
