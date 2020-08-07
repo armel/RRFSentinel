@@ -134,6 +134,7 @@ def main(argv):
         if unban_list:
             for b in unban_list:
                 if b in s.link_ip:
+                    print('Ok')
                     # Unban current reflector IP
                     l.del_iptable(s.link_ip[b], '5300', b, unban_list[b][2], unban_list[b][3])
 
@@ -142,7 +143,7 @@ def main(argv):
 
                     del s.ban_list[b]
                 else:
-                    print('echec')
+                    print('Echec')
 
         # Write json for RRFBlockIP
 
