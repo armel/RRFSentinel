@@ -31,7 +31,7 @@ version = '2.3.1'
 salon = 'RRF'                   # room a surveiller
 
 intempestif_plage = 5           # durée de la plage de déclenchements en minutes
-intempestif_ban = 1             # durée de la quarantaine en minutes
+intempestif_ban = 5             # durée de la quarantaine en minutes
 intempestif_tx = 4              # nombre max de déclenchements suspects 
 intempestif_fair_use = 3        # nombre de ban avant application de la règle strict
 
