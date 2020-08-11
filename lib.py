@@ -48,7 +48,7 @@ def read_log():
     if nodes != '':
         s.link_ip.clear()
         for node in nodes['nodes']:
-            if node[0] == s.serveur:
+            if node[0] == s.serveur and node[1] == s.salon:
                 s.link_ip[node[2].strip()] = node[3]
     '''
     # Sinon, on utilise la methode traditionnelle en lisant le log de svxreflector
