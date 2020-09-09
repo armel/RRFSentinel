@@ -53,7 +53,7 @@ def main(argv):
                     indicatif = data['Indicatif']
                     tot = data['TOT']
 
-                    if tot > s.tot_limit:
+                    if tot > s.tot_limit and indicatif in s.link_ip and indicatif not in s.ban_list:
 
                         try:
                             s.ban_count_tot[indicatif] += 1
