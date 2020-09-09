@@ -182,7 +182,7 @@ def main(argv):
                 'Début': s.ban_list[b][4],
                 'Durée': s.ban_list[b][5],
                 'Fin': s.ban_list[b][3],
-                'Raison': s.ban_list[b][2]
+                'Type': s.ban_list[b][2]
             })    
 
         with open(s.path_json, 'w') as f:
