@@ -30,7 +30,7 @@ version = '2.4.0'
 
 salon = 'RRF'                   # room a surveiller
 
-tot_limit = 10                  # durée du tot (durée de passage en émission avant action...)
+tot_limit = 12                 # durée du tot en secondes (durée de passage en émission avant action...)
 tot_ban = 30                    # durée de la quarantaine en secondes
 
 intempestif_plage = 5           # durée de la plage de déclenchements en minutes

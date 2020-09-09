@@ -68,7 +68,7 @@ def main(argv):
 
                         s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'TOT', ban_stop, ban_start, str(ban_time) + 's')
                 
-                        ban_comment = ' - [' + str(tot) + '] - ' + str(s.ban_count_tot[indicatif]) + ' - ' + str(ban_time)
+                        ban_comment = ' - [' + str(tot) + '] - ' + str(s.ban_count_tot[indicatif]) + ' - ' + str(ban_time) + 's'
                         l.add_iptable(s.link_ip[indicatif], '5300', indicatif, 'TOT', ban_stop, ban_comment)
 
             #
@@ -113,7 +113,7 @@ def main(argv):
 
                         s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'INTEMPESTIF', ban_stop, ban_start, str(ban_time) + 'm')
                 
-                        ban_comment = ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count_intempestif[indicatif]) + ' - ' + str(ban_time)
+                        ban_comment = ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count_intempestif[indicatif]) + ' - ' + str(ban_time) + 'm'
                         l.add_iptable(s.link_ip[indicatif], '5300', indicatif, 'INTEMPESTIF', ban_stop, ban_comment)
     
             #
@@ -147,7 +147,7 @@ def main(argv):
 
                             s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'CAMPEUR', ban_stop, ban_start, str(ban_time) + 'm')
 
-                            ban_comment = ' - [' + str(bf) + ' @ ' + str(tx) + '] - ' + str(s.ban_count_campeur[indicatif]) + ' - ' + str(ban_time)
+                            ban_comment = ' - [' + str(bf) + ' @ ' + str(tx) + '] - ' + str(s.ban_count_campeur[indicatif]) + ' - ' + str(ban_time) + 'm'
                             l.add_iptable(s.link_ip[indicatif], '5300', indicatif, 'CAMPEUR', ban_stop, ban_comment)
 
                     else:
