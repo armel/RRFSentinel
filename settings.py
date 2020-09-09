@@ -24,11 +24,14 @@ On ban pour 15 minutes
 
 # Version
 
-version = '2.3.3'
+version = '2.4.0'
 
 # Variables par defaut
 
 salon = 'RRF'                   # room a surveiller
+
+tot_limit = 10                  # durée du tot (durée de passage en émission avant action...)
+tot_ban = 30                    # durée de la quarantaine en secondes
 
 intempestif_plage = 5           # durée de la plage de déclenchements en minutes
 intempestif_ban = 5             # durée de la quarantaine en minutes
@@ -56,7 +59,9 @@ porteuse = {}
 all = {}
 white_list = ['F5ZIN-L', 'R.R.F', 'R.R.F_V2', 'RRF', 'RRF3']
 ban_list = {}
-ban_count = {}
+ban_count_tot = {}
+ban_count_intempestif = {}
+ban_count_campeur = {}
 
 nodes_json = 'http://rrf2.f5nlg.ovh:4440/nodes'
 nodes_file = '/tmp/svxreflector.log'

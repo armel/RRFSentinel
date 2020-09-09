@@ -45,6 +45,33 @@ def main(argv):
             rrf_data = r.json()
 
             #
+            # Gestion des tot
+            #
+
+            if 'abstract' in rrf_data:
+                for data in rrf_data['abstract']:
+                    indicatif = data['Indicatif']
+                    tot = data['TOT']
+
+                    if tot > s.tot_limit:
+
+                        try:
+                            s.ban_count_tot[indicatif] += 1
+                        except KeyError:
+                            s.ban_count_tot[indicatif] = 1
+
+                        ban_time = s.tot_ban
+                        ban_start = plage_stop
+                        ban_timestamp = (now + datetime.timedelta(seconds = ban_time))
+                        ban_stop = ban_timestamp.strftime('%H:%M:%S')
+                        ban_timestamp = time.mktime(ban_timestamp.timetuple())
+
+                        s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'TOT', ban_stop, ban_start, str(ban_time) + 's')
+                
+                        ban_comment = ' - [' + str(tot) + '] - ' + str(s.ban_count_tot[indicatif]) + ' - ' + str(ban_time)
+                        l.add_iptable(s.link_ip[indicatif], '5300', indicatif, 'TOT', ban_stop, ban_comment)
+
+            #
             # Gestion des intempestifs
             #
 
@@ -67,15 +94,15 @@ def main(argv):
 
                     if count >= s.intempestif_tx and indicatif in s.link_ip and indicatif not in s.ban_list:
                         try:
-                            s.ban_count[indicatif] += 1
+                            s.ban_count_intempestif[indicatif] += 1
                         except KeyError:
-                            s.ban_count[indicatif] = 1
+                            s.ban_count_intempestif[indicatif] = 1
 
-                        if s.ban_count[indicatif] <= s.intempestif_fair_use:
+                        if s.ban_count_intempestif[indicatif] <= s.intempestif_fair_use:
                             ban_time = s.intempestif_ban
                         else:
                             if indicatif[-2:] == ' H' or indicatif[-2:] == ' S':  # Si Hotspot
-                                ban_time = int(tx) * (s.ban_count[indicatif] - s.intempestif_fair_use)
+                                ban_time = int(tx) * (s.ban_count_intempestif[indicatif] - s.intempestif_fair_use)
                             else:                       # Sinon...
                                 ban_time = int(tx) * 2
 
@@ -86,7 +113,7 @@ def main(argv):
 
                         s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'INTEMPESTIF', ban_stop, ban_start, str(ban_time) + 'm')
                 
-                        ban_comment = ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count[indicatif]) + ' - ' + str(ban_time)
+                        ban_comment = ' - [' + ', '.join(date[-count:]) + ' @ ' + str(tx) + '] - ' + str(s.ban_count_intempestif[indicatif]) + ' - ' + str(ban_time)
                         l.add_iptable(s.link_ip[indicatif], '5300', indicatif, 'INTEMPESTIF', ban_stop, ban_comment)
     
             #
@@ -107,15 +134,20 @@ def main(argv):
                                 bf += l.convert_time_to_second(c[t])
                                 #print(data['Indicatif'], h[t], c[t], tx, bf)
                         if tx >= s.campeur_tx and bf >= s.campeur_bf:
+                            try:
+                                s.ban_count_campeur[indicatif] += 1
+                            except KeyError:
+                                s.ban_count_campeur[indicatif] = 1
+                            
                             ban_time = s.campeur_ban
                             ban_start = plage_stop
-                            ban_timestamp = (now + datetime.timedelta(minutes = s.campeur_ban))
+                            ban_timestamp = (now + datetime.timedelta(minutes = ban_time))
                             ban_stop = ban_timestamp.strftime('%H:%M:%S')
                             ban_timestamp = time.mktime(ban_timestamp.timetuple())
 
                             s.ban_list[indicatif] = (ban_timestamp, s.link_ip[indicatif], 'CAMPEUR', ban_stop, ban_start, str(ban_time) + 'm')
 
-                            ban_comment = ' - [' + str(bf) + ' @ ' + str(tx) + '] - ' + str(ban_time)
+                            ban_comment = ' - [' + str(bf) + ' @ ' + str(tx) + '] - ' + str(s.ban_count_campeur[indicatif]) + ' - ' + str(ban_time)
                             l.add_iptable(s.link_ip[indicatif], '5300', indicatif, 'CAMPEUR', ban_stop, ban_comment)
 
                     else:
@@ -149,8 +181,8 @@ def main(argv):
                 'Indicatif': b,
                 'Début': s.ban_list[b][4],
                 'Durée': s.ban_list[b][5],
-                'Fin': s.ban_list[b][3]
-                #'Raison': s.ban_list[b][2] (si on ajoute les campeur à l'affichage BlockIP)
+                'Fin': s.ban_list[b][3],
+                'Raison': s.ban_list[b][2]
             })    
 
         with open(s.path_json, 'w') as f:
@@ -160,12 +192,14 @@ def main(argv):
         if now.strftime('%H:%M') == '00:00':
             # Waiting during RRFTracker init...
             s.porteuse.clear()
+            s.ban_count_tot.clear()
+            s.ban_count_campeur.clear()
             time.sleep(60)
 
         # If time < 06:00am, fair use only !
         if now.strftime('%H:%M') < s.fair_use_time:
             # Reset ban_count
-            s.ban_count.clear()
+            s.ban_count_intempestif.clear()
 
         time.sleep(2)
         sys.stdout.flush()
