@@ -24,13 +24,13 @@ On ban pour 15 minutes
 
 # Version
 
-version = '2.4.0'
+version = '2.4.1'
 
 # Variables par defaut
 
 salon = 'RRF'                   # room a surveiller
 
-tot_limit = 120                 # durée du tot en secondes (durée de passage en émission avant action...)
+tot_limit = 150                 # durée du tot en secondes (durée de passage en émission avant action...)
 tot_ban = 30                    # durée de la quarantaine en secondes
 
 intempestif_plage = 5           # durée de la plage de déclenchements en minutes
