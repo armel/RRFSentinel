@@ -30,35 +30,19 @@ def hostname_init():
 
 # Recuperation des nodes
 def read_log():
-    nodes = ''
-
     # Requete HTTP vers le flux json de l'API fournie par F1EVM
     try:
-        r = requests.get(s.nodes_json, verify=False, timeout=5)
-    except:
-        pass
-
-    # Controle de la validité du flux json
-    try:
+        r = requests.get(s.nodes_json, verify=False, timeout=.5)
         nodes = r.json()
+        if 'nodes' in nodes:
+            s.link_ip.clear()
+            for node in nodes['nodes']:
+                if node[0] == s.serveur and node[1] == s.salon:
+                    s.link_ip[node[2].strip()] = node[3]
     except:
         pass
 
-    # Si le flux json est valide
-    if nodes != '':
-        s.link_ip.clear()
-        for node in nodes['nodes']:
-            if node[0] == s.serveur and node[1] == s.salon:
-                s.link_ip[node[2].strip()] = node[3]
-    '''
-    # Sinon, on utilise la methode traditionnelle en lisant le log de svxreflector
-    else:
-        with open(s.nodes_file) as f:
-            for line in f:
-                if 'Login' in line:
-                    element = line.split(':')
-                    s.link_ip[element[3].strip()] = element[4][15:]
-    '''
+    return True
 
 # Convert time to second
 def convert_time_to_second(time):

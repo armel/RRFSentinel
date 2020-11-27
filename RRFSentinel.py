@@ -35,11 +35,9 @@ def main(argv):
 
         # Request HTTP datas
         try:
-            r = requests.get(s.salon_list[s.salon]['url'], verify=False, timeout=1)
-        except requests.exceptions.ConnectionError as errc:
-            print(('Error Connecting:', errc))
-        except requests.exceptions.Timeout as errt:
-            print(('Timeout Error:', errt))
+            r = requests.get(s.salon_list[s.salon]['url'], verify=False, timeout=.5)
+        except:
+            pass
 
         try:
             rrf_data = r.json()
