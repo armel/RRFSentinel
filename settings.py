@@ -24,7 +24,7 @@ On ban pour 15 minutes
 
 # Version
 
-version = '2.4.2'
+version = '2.5.0'
 
 # Variables par defaut
 
@@ -49,9 +49,12 @@ path_log = '/tmp/RRFSentinel.log'
 path_pid = '/tmp/RRFSentinel.pid'
 path_json = '/var/www/RRFBlockIP/data/RRFSentinel.json'
 
+rrf1 = 'http://217.182.206.155'
+rrf2 = 'http://137.74.192.234'
+
 salon_list = {
     'RRF': {
-        'url': 'http://rrf.f5nlg.ovh:8080/RRFTracker/RRF-today/rrf.json',
+        'url': rrf1 + ':8080/RRFTracker/RRF-today/rrf.json',
     }
 }
 
@@ -63,7 +66,7 @@ ban_count_tot = {}
 ban_count_intempestif = {}
 ban_count_campeur = {}
 
-nodes_json = 'http://rrf2.f5nlg.ovh:4440/nodes'
+nodes_json = rrf2 + ':4440/nodes'
 nodes_file = '/tmp/svxreflector.log'
 
 # Variables globales
