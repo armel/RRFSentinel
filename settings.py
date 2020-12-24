@@ -24,7 +24,7 @@ On ban pour 15 minutes
 
 # Version
 
-version = '2.5.0'
+version = '2.5.1'
 
 # Variables par defaut
 
@@ -33,9 +33,9 @@ salon = 'RRF'                   # room a surveiller
 tot_limit = 150                 # durée du tot en secondes (durée de passage en émission avant action...)
 tot_ban = 30                    # durée de la quarantaine en secondes
 
-intempestif_plage = 5           # durée de la plage de déclenchements en minutes
-intempestif_ban = 5             # durée de la quarantaine en minutes
-intempestif_tx = 4              # nombre max de déclenchements suspects 
+intempestif_plage = 5           # durée de la plage de déclenchements en minutes (defaut 5)
+intempestif_ban = 10            # durée de la quarantaine en minutes (defaut 5)
+intempestif_tx = 3              # nombre max de déclenchements suspects (defaut 4)
 intempestif_fair_use = 3        # nombre de ban avant application de la règle strict
 
 campeur_plage = 60              # durée de la plage de déclenchements en minutes
